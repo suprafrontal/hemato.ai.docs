@@ -29,9 +29,9 @@ Call management integration typically includes monitoring of incoming calls, lis
 GET https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log HTTP/1.1
 Authorization: Bearer U0pDMDFQMDFQQVMwMnxBQUFWZmY4ZXoxMlh
 Accept: application/json
-~~~ 
+~~~
 
-~~~ 
+~~~
 HTTP/1.1 200 OK
 Content-Language: en
 Content-Type: application/json; charset=UTF-8
@@ -95,7 +95,7 @@ Content-Length: 4145
         }
     }
 }
-~~~ 
+~~~
 
 To access a Call Log resource you will require this URI:
 
@@ -109,9 +109,9 @@ Send the request having specified particular accountId and extensionId or using 
 GET https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log?dateFrom=2014-09-18&phoneNumber=16504445567&dateTo=2014-09-25&type=Voice HTTP/1.1
 Authorization: Bearer U0pDMDFQMDFQQVMwMnxBQUFWZmY4ZXoxMl
 Accept: application/json
-~~~ 
+~~~
 
-~~~ 
+~~~
 HTTP/1.1 200 OK
 Content-Language: en
 Content-Type: application/json; charset=UTF-8
@@ -172,7 +172,7 @@ Content-Length: 1725
         }
     }
 }
-~~~ 
+~~~
 
 You may get exactly the records you require by setting a few filters. For example if you need the records over a week (dateFrom, dateTo) of voice calls (type) to/from a certain number (phoneNumber), sned the request having set the following query parameters:
 
@@ -195,9 +195,9 @@ Content-Length: 323
     "from": {"phoneNumber": "+16504445567"},
     "text": "Test SMS message from Platform server"
 }
-~~~ 
+~~~
 
-~~~ 
+~~~
 HTTP/1.1 200 OK
 Content-Language: en
 Content-Type: application/json; charset=UTF-8
@@ -235,7 +235,7 @@ Content-Length: 926
     "conversationId": 5578972751633835268,
     "lastModifiedTime": "2014-09-24T07:04:26.534Z"
 }
-~~~ 
+~~~
 
 If you need to send a text message to somebody, you should use this URI:
 
@@ -251,13 +251,13 @@ Content-Type: application/json
 Content-Length: ACTUAL_CONTENT_LENGTH_HERE
 
 {
-"to": [{"extensionNumber": "102"}, 
+"to": [{"extensionNumber": "102"},
        {"extensionNumber": "103"}],
 
 "from": {"extensionNumber": "101"},
 "text": "Hello!"
 }
-                                            
+
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -289,7 +289,7 @@ Content-Type: application/json
 }
 ~~~
 
-Pager messages are RingCentral specific types of text messages which can be sent between extensions of one account. Unlike SMS, pager messages can be sent to multiple recipients, so the API allows several extension numbers in the **to** field. Another difference from SMS is that the pager message that is sent to the department extension is automatically forwarded to all department members. This allows setting up dedicated mailing lists within the organization. The endpoint **company-pager** is designed to handle pager messages. 
+Pager messages are RingCentral specific types of text messages which can be sent between extensions of one account. Unlike SMS, pager messages can be sent to multiple recipients, so the API allows several extension numbers in the **to** field. Another difference from SMS is that the pager message that is sent to the department extension is automatically forwarded to all department members. This allows setting up dedicated mailing lists within the organization. The endpoint **company-pager** is designed to handle pager messages.
 
 # Getting Started
 
@@ -310,7 +310,7 @@ var rcsdk = new RCSDK({
     appKey: 'yourAppKey',
     appSecret: 'yourAppSecret'
 });
-~~~ 
+~~~
 
 The SDK is represented by the global RCSDK constructor. Your application must create an instance of this object.
 
@@ -324,7 +324,7 @@ This instance will be used later on to perform calls to API.
 
 ~~~ javascript
 var platform = rcsdk.getPlatform();
-~~~ 
+~~~
 
 Now that you have your platform singleton and SDK has been configured with the correct server URL and API key, your application can log in so that it can access the features of the API.
 
@@ -348,8 +348,8 @@ if ('code' in qs) {
     var res = rcsdk.getPlatform().authorize(qs)
         .then(function(response) {
             // process response and close window (if popup)
-            window.open('', '_self', ''); 
-            window.close(); 
+            window.open('', '_self', '');
+            window.close();
         }).catch(function(e) {
             console.log("Error: Authorization")
         });
@@ -390,7 +390,7 @@ A Promise is returned, and you can use its then method to specify your continuat
 platform.on(platform.events.accessViolation, function(e){
     // do something
 });
-~~~ 
+~~~
 
 To handle possible access or authentication exceptions that may occur while the application is running (after the user has successfully logged in), you can provide a handler for the `accessViolation` platform event.
 
@@ -409,7 +409,7 @@ platform.isAuthorized()
 // Checking authn status synchronously
 // without auto-refresh of the access token
 if (platform.isTokenValid()) {...}
-~~~ 
+~~~
 
 The `isAuthorized` method will automatically perform a refresh of the access token, if needed. This method may be used in the login page of your application for automatic login.
 
@@ -420,7 +420,7 @@ There is also a synchronous method for checking the authentication status that d
 ~~~ javascript
 // Refreshing the access token manually
 platform.refresh().then(...)
-~~~ 
+~~~
 
 Access token refresh normally happens automatically for common use cases. On rare occasions, you may perform a refresh of the access token manually by calling the refresh method using the `platform.refresh()` method.
 
@@ -431,7 +431,7 @@ Access token refresh normally happens automatically for common use cases. On rar
 platform.logout()
 // with callback
 platform.logout().then(...)
-~~~ 
+~~~
 
 Your application can log out the user by calling the `platform.logout()` method.
 
@@ -459,7 +459,7 @@ platform
       // also save ajax.data as, for example, prevRingoutData
     })
     .catch(handleError);
-~~~ 
+~~~
 
 The application should stop polling the RingOut when its status changes to error or success because after that there will be no status updates.
 
@@ -487,18 +487,18 @@ var timeout = rcsdk.getUtils().poll(update, 3000); // stay in RPS limits
 // To stop polling:
 
 rcsdk.getUtils().stopPolling(timeout);
-~~~ 
+~~~
 
 Use polling to get the status of an ongoing outbound call.
 
 ## Outbound Call Control
 
-The RingCentral Connect Platform does not currently support control of outbound calls. However, you can cancel ringout call while callee party status is `InProgress`. To do that make a `DELETE` request to ringout URI. 
+The RingCentral Connect Platform does not currently support control of outbound calls. However, you can cancel ringout call while callee party status is `InProgress`. To do that make a `DELETE` request to ringout URI.
 
 ## Outbound Call Statuses
 
-* A 2-legged RingOut call is represented in events as an outbound call between `from` and `to` numbers provided in RingOut API request. 
-* There is the known issue: notification with `CallConnected` status comes after first leg is connected. So actually a call can be missed by callee but it won't be reflected in event flow; but it will be reflected in call log.  
+* A 2-legged RingOut call is represented in events as an outbound call between `from` and `to` numbers provided in RingOut API request.
+* There is the known issue: notification with `CallConnected` status comes after first leg is connected. So actually a call can be missed by callee but it won't be reflected in event flow; but it will be reflected in call log.
 * Phone numbers in notification (`from` and `to`) may be either E.164 phone numbers (with or without `+`) or short extension numbers (e.g. '101') for calls between extensions
 * For some RC phone system configurations when multiple devices are ringing for inbound call, you may get transitional notifications with `NoCall` status which will be immediately followed by `Ringing` or `CallConnected` (for the same `sessionId`).
 
@@ -566,7 +566,7 @@ A call management integration usually consists of the following tasks:
   "uuid": "2b5bb8c0-c36c-46af-bd93-fb41e330d87c",
   "event": "/restapi/v1.0/account/~/extension/607457016/presence?detailedTelephonyState=true"
 }
- 
+
 {
   "body": {
     "telephonyStatus": "NoCall",
@@ -580,7 +580,7 @@ A call management integration usually consists of the following tasks:
 }
 
 // 2) Answered inbound call (Ringing -> CallConnected -> NoCall)
- 
+
 {
   "body": {
     "telephonyStatus": "Ringing",
@@ -592,7 +592,7 @@ A call management integration usually consists of the following tasks:
   "uuid": "c394ccf6-85dd-4da4-a87e-d31fac7f1283",
   "event": "/restapi/v1.0/account/~/extension/607457016/presence?detailedTelephonyState=true"
 }
- 
+
 {
   "body": {
     "telephonyStatus": "CallConnected",
@@ -604,7 +604,7 @@ A call management integration usually consists of the following tasks:
   "uuid": "96df6fdd-a2a4-42fb-bc34-cffb5d637754",
   "event": "/restapi/v1.0/account/~/extension/607457016/presence?detailedTelephonyState=true"
 }
- 
+
 {
   "body": {
     "telephonyStatus": "NoCall",
@@ -628,7 +628,7 @@ A call management integration usually consists of the following tasks:
   "timestamp": "2015-04-17T19:38:59.718+0000",
   "uuid": "305b8075-5dad-4686-b22a-d26744802566", "event": "/restapi/v1.0/account/~/extension/255537016/presence?detailedTelephonyState=true"
 }
- 
+
 {
   "body": {
     "telephonyStatus": "CallConnected",
@@ -640,7 +640,7 @@ A call management integration usually consists of the following tasks:
   "uuid": "71673991-dad0-4c8e-9c22-78b0244c790c",
   "event": "/restapi/v1.0/account/~/extension/255537016/presence?detailedTelephonyState=true"
 }
- 
+
 {
   "body": {
     "telephonyStatus": "NoCall",
@@ -652,9 +652,9 @@ A call management integration usually consists of the following tasks:
   "uuid": "97b01949-1438-45f2-856a-54f89e83367f",
   "event": "/restapi/v1.0/account/~/extension/255537016/presence?detailedTelephonyState=true"
 }
-~~~ 
+~~~
 
-* A call may consist of multiple call legs. Top-level telephonyStatus should be aggregated across these multiple call legs. 
+* A call may consist of multiple call legs. Top-level telephonyStatus should be aggregated across these multiple call legs.
 * A call is identified by its sessionId. For tracking a call, application should match by sessionId across activeCall items from multiple notifications.
 * In some rare cases notifications can be delivered in incorrect order. Application should remember largest 'sequence' value from an event for a given call (identified by its sessionId) and ignore any events which come later with smaller 'sequence'
 
@@ -679,7 +679,7 @@ subscription
         ]
     })
     .then(...);
-~~~ 
+~~~
 
 To get notification of inbound and outbound call events, your application can receive push notifications from the RingCentral Connect Platform by subscribing to specific events, such as the telephony presence event.
 
@@ -699,7 +699,7 @@ subscription
         ],
     })
     .then(...);
-~~~ 
+~~~
 
 Subscript to the account using the `detailedTelephonyState` to get caller info (caller id and called number) from telephony presence events.
 
@@ -717,7 +717,7 @@ platform.apiCall({
 }).catch(function(e) {
     alert('Active Calls Error: ' + e.message);
 });
-~~~ 
+~~~
 
 To determine call duration or any other information about the call during the call, the application needs to remember discovered calls and save the time at which they were discovered (had Ringing or Connected status) and then duration can be calculated as difference between now and the saved time.
 
@@ -725,7 +725,7 @@ The application may periodically (around 2-5 minutes) poll the active calls endp
 
 ## Determining End of Call
 
-The application is responsible for caching active calls. A common method is to use a session ID to track a call. 
+The application is responsible for caching active calls. A common method is to use a session ID to track a call.
 Your application may gather information about discovered calls and when it sees 'No Call' after 'Connected' status it means that the call has ended. Also the call will disappear from active calls list. See the section below on determining call duration of a recently ended call for more info.
 
 ## Call Duration Post-Call
@@ -743,7 +743,7 @@ platform.apiCall({
 }).catch(function(e) {
     alert('Active Calls Error: ' + e.message);
 });
-~~~ 
+~~~
 
 Completed calls will stay in Active Calls for a limited time (few minutes). Use the following code to determine the duration of a recently completed call.
 
@@ -785,7 +785,7 @@ platform.apiCall(Call.loadRequest(null, {
 }).catch(function(e) {
     alert('Active Calls Error: ' + e.message);
 });
-~~~ 
+~~~
 
 By default, the load request returns calls that were made during the last week. To alter the time frame, provide custom query.dateTo and query.dateFrom properties.
 
@@ -804,7 +804,7 @@ platform.apiCall({
 }).catch(function(e) {
     alert('Calls Error: ' + e.message);
 });
-~~~ 
+~~~
 
 Recently ended calls appear in Call Log with some delay (seconds to a minute or so) so the recommended way to retrieve them is to use Active Calls API.
 
@@ -829,7 +829,7 @@ platform.apiCall(Call.loadRequest(null, {
 }).catch(function(e) {
     alert('Recent Calls Error: ' + e.message);
 });
-~~~ 
+~~~
 
 By default, the load request returns calls that were made during the last week. To alter the time frame, provide custom query.dateTo and query.dateFrom properties.
 
