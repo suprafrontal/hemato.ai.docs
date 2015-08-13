@@ -99,6 +99,12 @@ Examples of Slate in the Wild
 * [OAuth.io API Documentation](http://docs.oauth.io/)
 * [Aircall for Developers](http://developer.aircall.io/)
 * [SupportKit API Docs](http://docs.supportkit.io/)
+* [SocialRadar's LocationKit Docs](https://docs.locationkit.io/)
+* [SafetyCulture API Documentation](https://developer.safetyculture.io/)
+* [OAuth.io API Documentation](http://docs.oauth.io/)
+* [Aircall for Developers](http://developer.aircall.io/)
+* [SupportKit API Docs](http://docs.supportkit.io/)
+* [SocialRadar's LocationKit Docs](https://docs.locationkit.io/ios)
 
 (Feel free to add your site to this list in a pull request!)
 
