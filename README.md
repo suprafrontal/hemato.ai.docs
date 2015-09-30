@@ -53,7 +53,7 @@ Or use the included Dockerfile! (must install Docker first)
 
 ```shell
 docker build -t slate .
-docker run -d -p 4567:4567 --name slate -v $(pwd)/source:/app/source slate
+docker run -d -p 4567:4567 slate
 ```
 
 You can now see the docs at <http://localhost:4567>. Whoa! That was fast!
@@ -96,15 +96,6 @@ Examples of Slate in the Wild
 * [SupportKit API Docs](http://docs.supportkit.io/)
 * [SocialRadar's LocationKit Docs](https://docs.locationkit.io/)
 * [SafetyCulture API Documentation](https://developer.safetyculture.io/)
-* [OAuth.io API Documentation](http://docs.oauth.io/)
-* [Aircall for Developers](http://developer.aircall.io/)
-* [SupportKit API Docs](http://docs.supportkit.io/)
-* [SocialRadar's LocationKit Docs](https://docs.locationkit.io/)
-* [SafetyCulture API Documentation](https://developer.safetyculture.io/)
-* [OAuth.io API Documentation](http://docs.oauth.io/)
-* [Aircall for Developers](http://developer.aircall.io/)
-* [SupportKit API Docs](http://docs.supportkit.io/)
-* [SocialRadar's LocationKit Docs](https://docs.locationkit.io/ios)
 
 (Feel free to add your site to this list in a pull request!)
 
