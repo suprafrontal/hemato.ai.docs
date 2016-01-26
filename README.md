@@ -64,28 +64,10 @@ available at the output of `docker-machine ip <machine-name>` (port: 4567) inste
 
 Now that Slate is all set up your machine, you'll probably want to learn more about [editing Slate markdown](https://github.com/tripit/slate/wiki/Markdown-Syntax), or [how to publish your docs](https://github.com/tripit/slate/wiki/Deploying-Slate).
 
-Examples of Slate in the Wild
+Companies Using Slate
 ---------------------------------
 
-* [Travis-CI's API docs](https://docs.travis-ci.com/api/)
-* [Mozilla's localForage docs](http://mozilla.github.io/localForage/)
-* [Mozilla Recroom](http://mozilla.github.io/recroom/)
-* [Drcaban's Build a Quine tutorial](http://drcabana.github.io/build-a-quine/#introduction)
-* [PricePlow API docs](https://www.priceplow.com/api/documentation)
-* [Emerging Threats API docs](http://apidocs.emergingthreats.net/)
-* [Appium docs](http://appium.io/slate/en/master)
-* [Golazon Developer](http://developer.golazon.com)
-* [Dwolla API docs](https://docs.dwolla.com/)
-* [RozpisyZapasu API docs](http://www.rozpisyzapasu.cz/dev/api/)
-* [Codestar Framework Docs](http://codestarframework.com/documentation/)
-* [Buddycloud API](http://buddycloud.com/api)
-* [Crafty Clicks API](https://craftyclicks.co.uk/api/)
-* [Paracel API Reference](http://paracel.io/docs/api_reference.html)
-* [Switch Payments Documentation](http://switchpayments.com/docs/) & [API](http://switchpayments.com/developers/)
-* [Coinbase API Reference](https://developers.coinbase.com/api)
-* [Whispir.io API](https://whispir.github.io/api)
-* [NASA API](https://data.nasa.gov/developer/external/planetary/)
-* [CardPay API](https://developers.cardpay.com/)
+* [NASA](https://api.nasa.gov)
 * [IBM Cloudant](https://docs.cloudant.com/api.html)
 * [Bitrix basis components](http://bbc.bitrix.expert/)
 * [viagogo API Documentation](http://developer.viagogo.net/)
@@ -107,7 +89,7 @@ Examples of Slate in the Wild
 Need Help? Found a bug?
 --------------------
 
-Just [submit a issue](https://github.com/tripit/slate/issues) to the Slate Github if you need any help. And, of course, feel free to submit pull requests with bug fixes or changes.
+Read our [contribution guidelines](https://github.com/tripit/slate/blob/master/CONTRIBUTING.md), and then [submit a issue](https://github.com/tripit/slate/issues) to the Slate Github if you need any help. And, of course, feel free to submit pull requests with bug fixes or changes.
 
 
 Contributors
