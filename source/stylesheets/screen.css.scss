@@ -1,8 +1,6 @@
 @charset "utf-8";
 @import 'normalize';
-@import 'compass';
 @import 'variables';
-@import 'syntax';
 @import 'icon-font';
 
 /*
@@ -363,7 +361,7 @@ html, body {
     padding: 0 $main-padding;
     box-sizing: border-box;
     display: block;
-    @include text-shadow($main-embossed-text-shadow);
+    text-shadow: $main-embossed-text-shadow;
 
     @extend %left-col;
   }
@@ -495,7 +493,7 @@ html, body {
   aside {
     padding-top: 1em;
     padding-bottom: 1em;
-    @include text-shadow(0 1px 0 lighten($aside-notice-bg, 15%));
+    text-shadow: 0 1px 0 lighten($aside-notice-bg, 15%);
     margin-top: 1.5em;
     margin-bottom: 1.5em;
     background: $aside-notice-bg;
@@ -503,12 +501,12 @@ html, body {
 
     &.warning {
       background-color: $aside-warning-bg;
-      @include text-shadow(0 1px 0 lighten($aside-warning-bg, 15%));
+      text-shadow: 0 1px 0 lighten($aside-warning-bg, 15%);
     }
 
     &.success {
       background-color: $aside-success-bg;
-      @include text-shadow(0 1px 0 lighten($aside-success-bg, 15%));
+      text-shadow: 0 1px 0 lighten($aside-success-bg, 15%);
     }
   }
 
@@ -638,4 +636,12 @@ html, body {
   %right-col + %left-col {
     margin-top: $main-padding;
   }
+}
+
+.highlight .c, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #909090;
+}
+
+.highlight, .highlight .w {
+  background-color: $code-bg;
 }
