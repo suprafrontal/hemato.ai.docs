@@ -81,6 +81,7 @@ Companies Using Slate
 * [Coinbase](https://developers.coinbase.com/api)
 * [Parrot Drones](http://developer.parrot.com/docs/bebop/)
 * [Fidor Bank](http://docs.fidor.de/)
+* [Scale](https://docs.scaleapi.com/)
 
 (Feel free to add your site to this list in a pull request!)
 
