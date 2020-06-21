@@ -322,12 +322,12 @@ html, body {
 }
 
 .lang-selector {
+  display: flex;
   background-color: $lang-select-bg;
   font-weight: bold;
   width: 100%;
   a {
-    display: block;
-    float:left;
+    display: inline;
     color: $lang-select-text;
     text-decoration: none;
     padding: 0 10px;
