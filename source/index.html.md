@@ -872,8 +872,8 @@ api.kittens.delete(2)
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
+curl "http://example.com/api/kittens/2" \
+  -X DELETE \
   -H "Authorization: meowmeowmeow"
 ```
 
