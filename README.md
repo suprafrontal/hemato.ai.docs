@@ -82,6 +82,7 @@ Companies Using Slate
 * [Clearbit](https://clearbit.com/docs)
 * [Coinbase](https://developers.coinbase.com/api)
 * [Parrot Drones](http://developer.parrot.com/docs/bebop/)
+* [CoinAPI](https://docs.coinapi.io/)
 
 (Feel free to add your site to this list in a pull request!)
 
