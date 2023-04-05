@@ -1,26 +1,8 @@
-FROM ruby:2.6-slim
+FROM golang:1.20
 
-WORKDIR /srv/slate
+WORKDIR /go/src/github.com/suprafrontal/hemato.ai.docs
+COPY . .
 
-EXPOSE 4567
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o www
 
-COPY Gemfile .
-COPY Gemfile.lock .
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        build-essential \
-        git \
-        nodejs \
-    && gem install bundler \
-    && bundle install \
-    && apt-get remove -y build-essential git \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY . /srv/slate
-
-RUN chmod +x /srv/slate/slate.sh
-
-ENTRYPOINT ["/srv/slate/slate.sh"]
-CMD ["build"]
+CMD ["./www"]
