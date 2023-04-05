@@ -83,7 +83,7 @@ curl "https://api.hemato.ai/login/demo"
 // Not implemented yet
 ```
 
-> The above command returns a JSON structured like this:
+> The above command returns a JSON structure like this:
 
 ```json
 {
@@ -114,7 +114,7 @@ echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST
 // Not implemented yet
 ```
 
-> The above command returns a JSON structured like this:
+> The above command returns a JSON structure like this:
 
 ```json
 {
@@ -234,17 +234,19 @@ To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
 Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
 
 ### HTTP Request
-Make a `POST` call to the `/pbs` endpoint
+Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find, retrive PBSs easier.
+<aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
+
 
 ```shell
 # use httpie from https://httpie.io/
-http -f POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"tags":{"patient_proxy_id":"}}' | http -f POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
 curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs
 ```
 > Make sure to replace `HEMATO_AI_AUTH_TOKEN` with your API key.
 
-> The above command returns a JSON structured like this:
+> The above command returns a JSON structure like this:
 
 ```json
 {
@@ -281,7 +283,7 @@ http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMAT
 curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Type:image/jpeg" --data-binary "@/path/to/filename.jpg"  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
 ```
 
-> The above command returns a JSON structured like this:
+> The above command returns a JSON structure like this:
 
 ```json
 {
@@ -314,7 +316,7 @@ http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMAT
 curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Type:image/jpeg" --data-binary "@/path/to/filename.jpg"  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
 ```
 
-> The above command returns a JSON structured like this:
+> The above command returns a JSON structure like this:
 
 ```json
 {
@@ -345,4 +347,21 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 
 
 ## 5. Get The Report for a Peripheral Blood Seamr Study
+You can get the latest version of the report by makeing a GET call.
+In cases that there are multiple revisions and you want to get an ealier version of the report you need to specify the version.
+
+
+> To get the latest diagnostic report on a PBS
+
+```shell
+#
+http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report Authorization:HEMATO_AI_AUTH_TOKEN
+#
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report
+```
+
+> Which in turn returns a JSON structure like:
+
+```json
+```
 
