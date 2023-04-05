@@ -1,0 +1,684 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link href="images/favicon-a227ab59.svg" rel="icon" type="image/svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta
+            name="description"
+            content="Documentation for Hemato.AI Diagnostic API"
+        >
+    <title>API Reference</title>
+
+    <style media="screen">
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s, .highlight .sa, .highlight .dl {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf, .highlight .fm {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv, .highlight .vm {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #f92672;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <style media="print">
+      * {
+        -webkit-transition:none!important;
+        transition:none!important;
+      }
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #586e75;
+}
+.highlight .err {
+  color: #002b36;
+  background-color: #dc322f;
+}
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
+  color: #657b83;
+}
+.highlight .cp {
+  color: #b58900;
+}
+.highlight .nt {
+  color: #b58900;
+}
+.highlight .o, .highlight .ow {
+  color: #93a1a1;
+}
+.highlight .p, .highlight .pi {
+  color: #93a1a1;
+}
+.highlight .gi {
+  color: #859900;
+}
+.highlight .gd {
+  color: #dc322f;
+}
+.highlight .gh {
+  color: #268bd2;
+  background-color: #002b36;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #6c71c4;
+}
+.highlight .kc {
+  color: #cb4b16;
+}
+.highlight .kt {
+  color: #cb4b16;
+}
+.highlight .kd {
+  color: #cb4b16;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #859900;
+}
+.highlight .sa {
+  color: #6c71c4;
+}
+.highlight .sr {
+  color: #2aa198;
+}
+.highlight .si {
+  color: #d33682;
+}
+.highlight .se {
+  color: #d33682;
+}
+.highlight .nn {
+  color: #b58900;
+}
+.highlight .nc {
+  color: #b58900;
+}
+.highlight .no {
+  color: #b58900;
+}
+.highlight .na {
+  color: #268bd2;
+}
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
+  color: #859900;
+}
+.highlight .ss {
+  color: #859900;
+}
+    </style>
+    <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all-b12a2749.js"></script>
+
+    <script>
+      $(function() { setupCodeCopy(); });
+    </script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;go&quot;,&quot;python&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar-cad8cdcb.png" alt="" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo-c722fd2c.png" class="logo" alt="" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="go">go</a>
+              <a href="#" data-language-name="python">python</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#http-responses" class="toc-h1 toc-link" data-title="HTTP Responses">HTTP Responses</a>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#demo-auth" class="toc-h2 toc-link" data-title="Demo Auth">Demo Auth</a>
+                  </li>
+                  <li>
+                    <a href="#session-auth" class="toc-h2 toc-link" data-title="Session Auth">Session Auth</a>
+                  </li>
+                  <li>
+                    <a href="#public-priavte-key-auth" class="toc-h2 toc-link" data-title="Public / Priavte Key Auth">Public / Priavte Key Auth</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#peripheral-blood-smear" class="toc-h1 toc-link" data-title="Peripheral Blood Smear">Peripheral Blood Smear</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#how-does-it-work" class="toc-h2 toc-link" data-title="How does it work?">How does it work?</a>
+                  </li>
+                  <li>
+                    <a href="#1-get-an-id" class="toc-h2 toc-link" data-title="1. Get an ID">1. Get an ID</a>
+                  </li>
+                  <li>
+                    <a href="#2-upload-the-files" class="toc-h2 toc-link" data-title="2. Upload the files">2. Upload the files</a>
+                  </li>
+                  <li>
+                    <a href="#3-request-a-diagnostic-study" class="toc-h2 toc-link" data-title="3. Request a Diagnostic Study">3. Request a Diagnostic Study</a>
+                  </li>
+                  <li>
+                    <a href="#4-wait-for-it" class="toc-h2 toc-link" data-title="4. Wait for it">4. Wait for it</a>
+                  </li>
+                  <li>
+                    <a href="#5-get-the-report-for-a-peripheral-blood-seamr-study" class="toc-h2 toc-link" data-title="5. Get The Report for a Peripheral Blood Seamr Study">5. Get The Report for a Peripheral Blood Seamr Study</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+          </li>
+      </ul>
+        <ul class="toc-footer">
+            <li><a href='https://hemato.ai'>Hemato.AI</a></li>
+            <li><a href='mailto:ai@hemato.ai'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI&#39;s Diagnostic AI and Clinical Algorithms, which can get process images of peripheral blood slides and generate hematopathology reports.</p>
+
+<p>We have language bindings in Go, ( also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<h1 id='http-responses'>HTTP Responses</h1>
+<p>Most Hemato.AI API will return a JSON encoded response in this format.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some error message"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"user_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>This reflects the <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP Status code</a></td>
+</tr>
+<tr>
+<td>error</td>
+<td>If something has gone wrong, this provides an error message possibly with error codes or more context on what has happened. almost always this comes along side a 4xx or 5xx status code</td>
+</tr>
+<tr>
+<td>results</td>
+<td>This is the output of the call, and can be of any type, often a dictionary / object.</td>
+</tr>
+<tr>
+<td>user_message</td>
+<td>This is a message that can be displayed to the end users, often useful in cases there is an error</td>
+</tr>
+<tr>
+<td>debug_info</td>
+<td>Contains information helpful when debugging</td>
+</tr>
+</tbody></table>
+<h1 id='authentication'>Authentication</h1>
+<p>All authenticated calls to Hemato.AI API are expected to present an <code>Authorization</code> header containing a signed and not expired token.
+To obtain an authorization token you have 3 options.</p>
+
+<ol>
+<li>Demo Authentication: this is only useful for development and testing purposes.</li>
+<li>Session Based Authentication: you can provide a user name and password to obtain a newly minted and signed token.</li>
+<li>Public-Private Key: if you have a public key registered with Hemato.AI you can sign your own tokens. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. To learn more read <a href="#Register-Public-Key">How to register your public keys with hemato</a></li>
+</ol>
+<h2 id='demo-auth'>Demo Auth</h2>
+<blockquote>
+<p>To authorize, using Demo Authentication this code:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
+http https://api.hemato.ai/login/demo
+<span class="c"># or use curl, you can just pass the correct header with each request</span>
+curl <span class="s2">"https://api.hemato.ai/login/demo"</span>
+</code></pre></div><div class="highlight"><pre class="highlight go tab-go"><code><span class="c">// Not implemented yet</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns a JSON structure like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"hemato_ai_auth_token"</span><span class="p">:</span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h2 id='session-auth'>Session Auth</h2>
+<blockquote>
+<p>To authorize, using Session Authentication this code:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># SECURITY RISK:</span>
+<span class="c"># Please ONLY use this for debugging login problems.</span>
+<span class="c"># MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.</span>
+<span class="c"># otherwise your plan password will remain in your shell history and possibly leak into backups and such.</span>
+<span class="nb">export </span><span class="nv">PASS_SHA_256</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nt">-n</span> YOUR_ACTUAL_PASSWORD | shasum <span class="nt">-a</span> 256 | <span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">' '</span> <span class="nt">-f</span> 1<span class="sb">`</span>
+<span class="c"># use httpie from https://httpie.io/</span>
+<span class="nb">echo</span> <span class="s1">'{"user":"ali@example.com","pass_hash":"'</span><span class="k">${</span><span class="nv">PASS_SHA_256</span><span class="k">}</span><span class="s1">'"}'</span> | http <span class="nt">-F</span> POST https://api.hemato.ai/auth/login
+<span class="c"># or use curl, you can just pass the correct header with each request</span>
+<span class="nb">echo</span> <span class="s1">'{"user":"ali@example.com","pass_hash":"'</span><span class="k">${</span><span class="nv">PASS_SHA_256</span><span class="k">}</span><span class="s1">'"}'</span> | curl <span class="nt">-X</span> POST <span class="s2">"https://api.hemato.ai/auth/login"</span>
+</code></pre></div><div class="highlight"><pre class="highlight go tab-go"><code><span class="c">// Not implemented yet</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns a JSON structure like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"hemato_ai_auth_token"</span><span class="p">:</span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h2 id='public-priavte-key-auth'>Public / Priavte Key Auth</h2>
+<p>Detailed Instructions to be added here.</p>
+
+<p>Hemato.AI expects for the API key to be included in majority of API requests to the server in a header that looks like the following:</p>
+
+<p><code>Authorization:HEMATO_AI_AUTH_TOKEN</code></p>
+
+<aside class="notice">
+You must replace <code>HEMATO_AI_AUTH_TOKEN</code> with your personal API key.
+</aside>
+<h1 id='peripheral-blood-smear'>Peripheral Blood Smear</h1><h2 id='how-does-it-work'>How does it work?</h2>
+<p>Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
+That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI</p>
+
+<p>To get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow this flow:
+1. Get an ID
+2. Upload the files
+3. Request a Diagnostic Study
+4. Wait for it
+5. Ask for the report</p>
+<h2 id='1-get-an-id'>1. Get an ID</h2>
+<p>Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI&#39;s review.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p>Make a <code>POST</code> call to the <code>/pbs</code> endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find, retrive PBSs easier.
+<aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside></p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
+<span class="nb">echo</span> <span class="s1">'{"tags":{"patient_proxy_id":"}}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="c"># alternatively use curl</span>
+curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> https://api.hemato.ai/pbs
+</code></pre></div>
+<blockquote>
+<p>Make sure to replace <code>HEMATO_AI_AUTH_TOKEN</code> with your API key.</p>
+
+<p>The above command returns a JSON structure like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"pbs_id"</span><span class="p">:</span><span class="s2">"c7d453a9-676d-4b9f-a505-8a9021b76dfd"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h2 id='2-upload-the-files'>2. Upload the files</h2>
+<p>Upload the sample by calling the PBS upload API as many times as needed.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p>Make a <code>POST</code> call to the <code>/pbs/YOUR_NEW_PBS_ID/files</code> endpoint. Here <code>YOUR_NEW_PBS_ID</code> is the id you obtained from step 1 (<code>results.pbs_id</code> in the response structure returned).</p>
+
+<p>This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.</p>
+
+<p>The file type is determined by the <code>Content-Type</code> header of your request. So when sending a requet to upload a jpg file for example, your request needs to have a header <code>Content-Type:image/jpeg</code>.
+This endpoint accepts:</p>
+
+<table><thead>
+<tr>
+<th>File Type</th>
+<th>Request Content-Type Header</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>jpeg , jpg</td>
+<td>image/jpeg</td>
+</tr>
+<tr>
+<td>png</td>
+<td>image/png</td>
+</tr>
+<tr>
+<td>zip ★</td>
+<td>application/zip</td>
+</tr>
+</tbody></table>
+
+<p>★ Zip files can containing jpg or png files.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
+http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  &lt; /path/to/filename.jpg
+<span class="c"># alternatively use curl</span>
+curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--header</span> <span class="s2">"Content-Type:image/jpeg"</span> <span class="nt">--data-binary</span> <span class="s2">"@/path/to/filename.jpg"</span>  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+</code></pre></div>
+<blockquote>
+<p>The above command returns a JSON structure like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"pbs_id"</span><span class="p">:</span><span class="s2">"HEMATO_AI_AUTH_TOKEN"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"file_id"</span><span class="p">:</span><span class="s2">"296bca9e-4325-4da9-9e95-d0c84bdf1b97"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"debug_info"</span><span class="p">:{</span><span class="w">
+
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<aside class="warning">Notes:<ul>
+<li>Please note that this is NOT an HTTP multipart call with `Content-Type: multipart/form-data` </li>
+<li>Plaese note that this is not a form submission call either. The entir body of the request is
+</ul>
+</aside>
+<h2 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h2>
+<p>When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed. After this call you will not be able to upload additional files.
+Here you also need to specifiy what diagnostic stydies you are interested in.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
+http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  &lt; /path/to/filename.jpg
+<span class="c"># alternatively use curl</span>
+curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--header</span> <span class="s2">"Content-Type:image/jpeg"</span> <span class="nt">--data-binary</span> <span class="s2">"@/path/to/filename.jpg"</span>  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+</code></pre></div>
+<blockquote>
+<p>The above command returns a JSON structure like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"pbs_id"</span><span class="p">:</span><span class="s2">"HEMATO_AI_AUTH_TOKEN"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"file_id"</span><span class="p">:</span><span class="s2">"296bca9e-4325-4da9-9e95-d0c84bdf1b97"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h2 id='4-wait-for-it'>4. Wait for it</h2>
+<p>Depending on the size of the files submitted and the number Diagnostic tasks requested and depending other factors, like general system workload. It will take between a few seconds to 10s of seconds for the results to be ready.</p>
+
+<p>You can check the status of the task by making a GET call to /status</p>
+
+<blockquote>
+<p>To get the status of a PBS</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c">#</span>
+http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="c">#</span>
+curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
+</code></pre></div>
+<blockquote>
+<p>This returns
+<code>json
+</code></p>
+</blockquote>
+<h2 id='5-get-the-report-for-a-peripheral-blood-seamr-study'>5. Get The Report for a Peripheral Blood Seamr Study</h2>
+<p>You can get the latest version of the report by makeing a GET call.
+In cases that there are multiple revisions and you want to get an ealier version of the report you need to specify the version.</p>
+
+<blockquote>
+<p>To get the latest diagnostic report on a PBS</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c">#</span>
+http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="c">#</span>
+curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report
+</code></pre></div>
+<blockquote>
+<p>Which in turn returns a JSON structure like:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code></code></pre></div><h1 id='errors'>Errors</h1>
+<aside class="notice">
+This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
+</aside>
+
+<p>The Hemato.AI API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request is invalid.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is not correctly signed or expired.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- Your token does not grant you permission to perform this task.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The specified resource could not be found.</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed -- You tried to access a resource with an invalid method.</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
+</tr>
+<tr>
+<td>410</td>
+<td></td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&#39;m a teapot.</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests -- You&#39;re being throttled</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- Our apologies, We had a problem with our server. Please try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable -- Our apologies, We&#39;re temporarily offline. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="go">go</a>
+                <a href="#" data-language-name="python">python</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
