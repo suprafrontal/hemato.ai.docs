@@ -31,7 +31,23 @@ We have language bindings in Go, ( also Python, C#, and TypeScript coming in fut
 
 # HTTP Responses
 
-All Hemato.AI API will return a JSON encoded response in this format.
+Most Hemato.AI API will return a JSON encoded response in this format.
+
+```json
+{
+	"status": 401,
+	"error": "some error message",
+	"results": {
+
+	},
+	"user_message": "",
+	"debug_info": {
+
+	}
+}
+
+```
+
 
 Field  | Description
 -------|------------
@@ -42,31 +58,18 @@ user_message | This is a message that can be displayed to the end users, often u
 debug_info | Contains information helpful when debugging
 
 
-```json
-{
-	"status": 201, // this reflects the HTTP Status code https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-  "error": "some error message",  // if something has gone wrong, this provides an error message possibly with error codes or more context on what has happened.
-	"results": {
-    // this is the output of the call, and can be of any type, often a dictionary / object.
-  },
-	"user_message": "", // this is a message that can be displayed to the end users, often useful in cases there is an error
-
-	"debug_info": {
-
-  }
-}
-
-```
 
 
 # Authentication
 
-There are 3 authentication modes available:
+All authenticated calls to Hemato.AI API are expected to present an `Authorization` header containing a signed and not expired token.
+To obtain an authorization token you have 3 options.
 
-1. Demo Authentication
-2. Session Based Authentication
-3. Public-Private Key
+1. Demo Authentication: this is only useful for development and testing purposes.
+2. Session Based Authentication: you can provide a user name and password to obtain a newly minted and signed token.
+3. Public-Private Key: if you have a public key registered with Hemato.AI you can sign your own tokens. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. To learn more read [How to register your public keys with hemato](#Register-Public-Key)
 
+## Demo Auth
 
 > To authorize, using Demo Authentication this code:
 
@@ -76,6 +79,10 @@ There are 3 authentication modes available:
 http https://api.hemato.ai/login/demo
 # or use curl, you can just pass the correct header with each request
 curl "https://api.hemato.ai/login/demo"
+```
+
+```go
+// Not implemented yet
 ```
 
 > The above command returns a JSON structured like this:
@@ -88,12 +95,42 @@ curl "https://api.hemato.ai/login/demo"
 }
 ```
 
+## Session Auth
+
+> To authorize, using Session Authentication this code:
+
+
+```shell
+# SECURITY RISK:
+# Please ONLY use this for debugging login problems.
+# MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
+# otherwise your plan password will remain in your shell history and possibly leak into backups and such.
+export PASS_SHA_256=`echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1`
+# use httpie from https://httpie.io/
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://api.hemato.ai/auth/login
+# or use curl, you can just pass the correct header with each request
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://api.hemato.ai/auth/login"
+```
 
 ```go
 // Not implemented yet
 ```
 
-Hemato.AI uses API tokens to allow access to the API. You can get more information at our [developer portal](https://developer.hemato.ai/).
+> The above command returns a JSON structured like this:
+
+```json
+{
+  "results":{
+    "hemato_ai_auth_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+}
+```
+
+## Public / Priavte Key Auth
+
+Detailed Instructions to be added here.
+
+
 
 Hemato.AI expects for the API key to be included in majority of API requests to the server in a header that looks like the following:
 
@@ -108,12 +145,19 @@ You must replace <code>HEMATO_AI_AUTH_TOKEN</code> with your personal API key.
 ## How does it work?
 
 Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
-That's why there is a three step process to submit a PBS for review by Hemato.AI
+That's why there are a few steps to submit a PBS for review by Hemato.AI
 
-### Step1
-Get a new PBS ID. This ID will be used to upload the images, provide any other information available and afterwards get the results of Hemato.AI's review.
+To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
+1. Get an ID
+2. Upload the files
+3. Request a Diagnostic Study
+4. Wait for it
+5. Ask for the report
 
-#### HTTP Request
+## 1. Get an ID
+Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
+
+### HTTP Request
 Make a `POST` call to the `/pbs` endpoint
 
 ```shell
@@ -134,10 +178,10 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai
 }
 ```
 
-### Step2
+## 2. Upload the files
 Upload the sample by calling the PBS upload API as many times as needed.
 
-#### HTTP Request
+### HTTP Request
 Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_id` in the response structure returned).
 
 This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
@@ -152,8 +196,6 @@ png | image/png
 zip ★ | application/zip
 
 ★ Zip files can containing jpg or png files.
-
-
 
 
 ```shell
@@ -185,8 +227,9 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 </aside>
 
 
-### Step 3
+## 3. Request a Diagnostic Study
 When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed. After this call you will not be able to upload additional files.
+Here you also need to specifiy what diagnostic stydies you are interested in.
 
 ```shell
 # use httpie from https://httpie.io/
@@ -205,3 +248,25 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
   }
 }
 ```
+
+## 4. Wait for it
+Depending on the size of the files submitted and the number Diagnostic tasks requested and depending other factors, like general system workload. It will take between a few seconds to 10s of seconds for the results to be ready.
+
+You can check the status of the task by making a GET call to /status
+
+> To get the status of a PBS
+
+```shell
+#
+http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
+#
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
+```
+
+> This returns
+```json
+```
+
+
+## 5. Get The Report for a Peripheral Blood Seamr Study
+
