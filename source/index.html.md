@@ -289,3 +289,18 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 ```json
 ```
 
+# Health Check
+If you need to check the health status of the Hemato.AI you can make a GET call to the heartbeat endpoint
+
+```shell
+http https://api.hemato.ai/heartbeat
+```
+
+```json
+{
+    "delta": "59.078µs",
+    "heartbeat": "a7ef8fba741237f693c3",
+    "request_timestamp": 1680716829,
+    "version": "bb_api.331.develop.18ff645"
+}
+```
