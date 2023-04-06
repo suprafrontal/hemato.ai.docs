@@ -20,8 +20,10 @@ export TS=`date +%s`
 
 echo Current Tag is $TS
 
-docker build -t docs.hemato.ai:$TS .
+docker build -t docs.hemato.ai:$TS -t docs.hemato.ai:latest .
 
 docker tag docs.hemato.ai:$TS 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:$TS
+docker tag docs.hemato.ai:latest 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:latest
 
 docker push 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:$TS
+docker push 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:latest

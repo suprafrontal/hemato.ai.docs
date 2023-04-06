@@ -224,8 +224,9 @@ Images of Peripheral Blood Smears (PBS) usually are very large. It is often impr
 That's why there are a few steps to submit a PBS for review by Hemato.AI
 
 To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
-1. Get an ID
-2. Upload the files
+
+1. Get an ID for your new PBS
+2. Upload the files under the new ID
 3. Request a Diagnostic Study
 4. Wait for it
 5. Ask for the report
@@ -306,14 +307,14 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 
 
 ## 3. Request a Diagnostic Study
-When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed. After this call you will not be able to upload additional files.
-Here you also need to specifiy what diagnostic stydies you are interested in.
+When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
+
 
 ```shell
 # use httpie from https://httpie.io/
-http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  < /path/to/filename.jpg
+echo '{"diagnostic_tasks":["pbs_v1"]}' | http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Type:image/jpeg" --data-binary "@/path/to/filename.jpg"  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+echo '{"diagnostic_tasks":["pbs_v1"]}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 ```
 
 > The above command returns a JSON structure like this:
