@@ -484,12 +484,15 @@ You must replace <code>HEMATO_AI_AUTH_TOKEN</code> with your personal API key.
 <p>Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
 That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI</p>
 
-<p>To get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow this flow:
-1. Get an ID
-2. Upload the files
-3. Request a Diagnostic Study
-4. Wait for it
-5. Ask for the report</p>
+<p>To get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow this flow:</p>
+
+<ol>
+<li>Get an ID for your new PBS</li>
+<li>Upload the files under the new ID</li>
+<li>Request a Diagnostic Study</li>
+<li>Wait for it</li>
+<li>Ask for the report</li>
+</ol>
 <h2 id='1-get-an-id'>1. Get an ID</h2>
 <p>Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI&#39;s review.</p>
 <h3 id='http-request'>HTTP Request</h3>
@@ -566,12 +569,11 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
 </ul>
 </aside>
 <h2 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h2>
-<p>When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed. After this call you will not be able to upload additional files.
-Here you also need to specifiy what diagnostic stydies you are interested in.</p>
+<p>When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
-http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  &lt; /path/to/filename.jpg
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"]}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 <span class="c"># alternatively use curl</span>
-curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--header</span> <span class="s2">"Content-Type:image/jpeg"</span> <span class="nt">--data-binary</span> <span class="s2">"@/path/to/filename.jpg"</span>  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"]}'</span> | curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--data-binary</span> @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 </code></pre></div>
 <blockquote>
 <p>The above command returns a JSON structure like this:</p>
