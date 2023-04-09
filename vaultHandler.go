@@ -22,7 +22,22 @@ func (vh vaultHandler) ServeHTTP(w http.ResponseWriter, q *http.Request) {
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
 		http.ServeFile(w, q, fmt.Sprintf("%s/index.html", STATIC_DIR))
 	case "/heartbeat":
-		fmt.Fprint(w, RandStr(20))
+		w.Header().Add("Content-Type", string("application/json"))
+		t1 := time.Now()
+		r := make(map[string]interface{})
+		r["status"] = 200
+		r["user-agent"] = q.UserAgent()
+		r["request_timestamp"] = time.Now().Unix()
+		r["heartbeat"] = RandStr(20)
+		r["version"] = hematoDocsVersion()
+		r["delta"] = fmt.Sprint(time.Since(t1))
+		rjson, err := json.Marshal(r)
+		if err != nil {
+			// if we cannot do this we should not be considered up and running
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else {
+			fmt.Fprint(w, string(rjson))
+		}
 	case "/version":
 		w.Header().Add("Content-Type", string("application/json"))
 		r := make(map[string]interface{})
