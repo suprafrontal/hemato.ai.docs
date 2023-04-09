@@ -175,8 +175,9 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai
 
 ```json
 {
+  "status": 201,
   "results":{
-    "pbs_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd"
+    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd"
   }
 }
 ```
@@ -214,7 +215,7 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 {
   "status": 201,
   "results":{
-    "pbs_id":"HEMATO_AI_AUTH_TOKEN",
+    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd",
     "file_id":"296bca9e-4325-4da9-9e95-d0c84bdf1b97"
   },
   "debug_info":{
