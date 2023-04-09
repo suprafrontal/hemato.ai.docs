@@ -12,18 +12,11 @@ echo Building the static website
 docker run --rm --name slate -v $(pwd)/build:/srv/slate/build -v $(pwd)/source:/srv/slate/source slatedocs/slate build
 
 
-echo Building the docker image to serve the static website
 
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 460080181115.dkr.ecr.us-east-1.amazonaws.com
+echo CLOUD BUILDING
+gcloud builds submit --tag gcr.io/stimulator/docs.hemato.ai --timeout=3m
+echo success
+echo -------------------
 
-export TS=`date +%s`
-
-echo Current Tag is $TS
-
-docker build -t docs.hemato.ai:$TS -t docs.hemato.ai:latest .
-
-docker tag docs.hemato.ai:$TS 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:$TS
-docker tag docs.hemato.ai:latest 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:latest
-
-docker push 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:$TS
-docker push 460080181115.dkr.ecr.us-east-1.amazonaws.com/docs.hemato.ai:latest
+echo DEPLOYING
+gcloud beta run deploy docs-hemato-ai --labels service=docs-hemato-ai,version="${VERSION}",commit=${COMMIT} --region us-east1 --timeout=1m --cpu 2 --memory 2Gi --image gcr.io/stimulator/docs.hemato.ai --platform managed
