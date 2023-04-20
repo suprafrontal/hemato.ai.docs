@@ -23,9 +23,9 @@ meta:
 
 # Introduction
 
-Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI's Diagnostic AI and Clinical Algorithms, which can get process images of peripheral blood slides and generate hematopathology reports.
+Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI's Diagnostic AI and Clinical Algorithms, which processes images of peripheral blood slides and generates hematopathology reports.
 
-We have language bindings in Go, ( also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We have language bindings in Go, (also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
 # HTTP Responses
 
@@ -50,10 +50,10 @@ Most Hemato.AI API will return a JSON encoded response in this format.
 Field  | Description
 -------|------------
 status | This reflects the [HTTP Status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
-error | If something has gone wrong, this provides an error message possibly with error codes or more context on what has happened. almost always this comes along side a 4xx or 5xx status code
+error | If something has gone wrong, this provides an error message with error codes or more context on what has happened.
 results | This is the output of the call, and can be of any type, often a dictionary / object.
-user_message | This is a message that can be displayed to the end users, often useful in cases there is an error
-debug_info | Contains information helpful when debugging
+user_message | This is a message that can be displayed to the end users. This is often useful in cases where there is an error.
+debug_info | Contains helpful information for debugging
 
 
 
@@ -61,15 +61,15 @@ debug_info | Contains information helpful when debugging
 # Authentication
 
 All authenticated calls to Hemato.AI API are expected to present an `Authorization` header containing a signed and not expired token.
-To obtain an authorization token you have 3 options.
+To obtain an authorization token you have 3 options:
 
-1. Demo Authentication: this is only useful for development and testing purposes.
+1. Demo Authentication: for development and testing purposes.
 2. Session Based Authentication: you can provide a user name and password to obtain a newly minted and signed token.
 3. Public-Private Key: if you have a public key registered with Hemato.AI you can sign your own tokens. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. To learn more read [How to register your public keys with hemato](#Register-Public-Key)
 
 ## Demo Auth
 
-> To authorize, using Demo Authentication this code:
+> To authorize, using Demo Authentication:
 
 
 ```shell
@@ -95,7 +95,7 @@ curl "https://api.hemato.ai/login/demo"
 
 ## Session Auth
 
-> To authorize, using Session Authentication this code:
+> To authorize, using Session Authentication:
 
 
 ```shell
@@ -124,9 +124,9 @@ echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST
 }
 ```
 
-## Public / Priavte Key Auth
+## Public / Private Key Auth
 
-Detailed Instructions to be added here.
+WIP: (Detailed instructions to be added)
 
 
 
@@ -221,7 +221,7 @@ A recommended way to handle access or authentication exceptions is to direct the
 ## How does it work?
 
 Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
-That's why there are a few steps to submit a PBS for review by Hemato.AI
+That's why there are a few steps to submit a PBS for review by Hemato.AI.
 
 To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
 
@@ -235,7 +235,7 @@ To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
 Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
 
 ### HTTP Request
-Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find, retrive PBSs easier.
+Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find and retrieve PBSs easier.
 <aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
 
 
@@ -262,11 +262,14 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai
 Upload the sample by calling the PBS upload API as many times as needed.
 
 ### HTTP Request
-Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_id` in the response structure returned).
+Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_id` in the response structure returned).
+
+This api accepts an optional "file_name" and stors this along side the file. This can be later used for audit purposes.
 
 This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
+Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.
 
-The file type is determined by the `Content-Type` header of your request. So when sending a requet to upload a jpg file for example, your request needs to have a header `Content-Type:image/jpeg`.
+The file type is determined by the `Content-Type` header of your request. So when sending a request to upload a jpg file for example, your request needs to have a header `Content-Type:image/jpeg`.
 This endpoint accepts:
 
 File Type | Request Content-Type Header
@@ -275,7 +278,10 @@ jpeg , jpg | image/jpeg
 png | image/png
 zip ★ | application/zip
 
-★ Zip files can containing jpg or png files.
+★ Zip files can contain jpg or png files.
+
+If the Content-Type header is missing, the file name extension for "file_name" provided is used to determine the file type.
+If no file type can be determined or provided, a 400 - Bad Request error is returned.
 
 
 ```shell
@@ -302,7 +308,7 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 
 <aside class="warning">Notes:<ul>
 <li>Please note that this is NOT an HTTP multipart call with `Content-Type: multipart/form-data` </li>
-<li>Plaese note that this is not a form submission call either. The entir body of the request is
+<li>Plaese note that this is not a form submission call either. The entire body of the request is the image.
 </ul>
 </aside>
 
@@ -330,7 +336,7 @@ echo '{"diagnostic_tasks":["pbs_v1"]}' | curl -x POST --header "Authorization:HE
 ```
 
 ## 4. Wait for it
-Depending on the size of the files submitted and the number Diagnostic tasks requested and depending other factors, like general system workload. It will take between a few seconds to 10s of seconds for the results to be ready.
+Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.
 
 You can check the status of the task by making a GET call to /status
 
@@ -348,9 +354,9 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 ```
 
 
-## 5. Get The Report for a Peripheral Blood Seamr Study
-You can get the latest version of the report by makeing a GET call.
-In cases that there are multiple revisions and you want to get an ealier version of the report you need to specify the version.
+## 5. Get The Report for a Peripheral Blood Smear Study
+You can get the latest version of the report by making a GET call.
+In cases that there are multiple revisions and you want to get an earlier version of the report you need to specify the version.
 
 
 > To get the latest diagnostic report on a PBS
@@ -367,8 +373,14 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 ```json
 ```
 
+There are 3 levels of report available.
+
+1. Morphological Findings
+2. Diagnostic Information
+3. Pathology Report
+
 # Health Check
-If you need to check the health status of the Hemato.AI you can make a GET call to the heartbeat endpoint
+If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.
 
 ```shell
 http https://api.hemato.ai/heartbeat
