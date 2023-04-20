@@ -331,7 +331,7 @@
                     <a href="#session-auth" class="toc-h2 toc-link" data-title="Session Auth">Session Auth</a>
                   </li>
                   <li>
-                    <a href="#public-priavte-key-auth" class="toc-h2 toc-link" data-title="Public / Priavte Key Auth">Public / Priavte Key Auth</a>
+                    <a href="#public-private-key-auth" class="toc-h2 toc-link" data-title="Public / Private Key Auth">Public / Private Key Auth</a>
                   </li>
               </ul>
           </li>
@@ -354,7 +354,7 @@
                     <a href="#4-wait-for-it" class="toc-h2 toc-link" data-title="4. Wait for it">4. Wait for it</a>
                   </li>
                   <li>
-                    <a href="#5-get-the-report-for-a-peripheral-blood-seamr-study" class="toc-h2 toc-link" data-title="5. Get The Report for a Peripheral Blood Seamr Study">5. Get The Report for a Peripheral Blood Seamr Study</a>
+                    <a href="#5-get-the-report-for-a-peripheral-blood-smear-study" class="toc-h2 toc-link" data-title="5. Get The Report for a Peripheral Blood Smear Study">5. Get The Report for a Peripheral Blood Smear Study</a>
                   </li>
               </ul>
           </li>
@@ -375,9 +375,9 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI&#39;s Diagnostic AI and Clinical Algorithms, which can get process images of peripheral blood slides and generate hematopathology reports.</p>
+<p>Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI&#39;s Diagnostic AI and Clinical Algorithms, which processes images of peripheral blood slides and generates hematopathology reports.</p>
 
-<p>We have language bindings in Go, ( also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>We have language bindings in Go, (also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
 <h1 id='http-responses'>HTTP Responses</h1>
 <p>Most Hemato.AI API will return a JSON encoded response in this format.</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -405,7 +405,7 @@
 </tr>
 <tr>
 <td>error</td>
-<td>If something has gone wrong, this provides an error message possibly with error codes or more context on what has happened. almost always this comes along side a 4xx or 5xx status code</td>
+<td>If something has gone wrong, this provides an error message with error codes or more context on what has happened.</td>
 </tr>
 <tr>
 <td>results</td>
@@ -413,25 +413,25 @@
 </tr>
 <tr>
 <td>user_message</td>
-<td>This is a message that can be displayed to the end users, often useful in cases there is an error</td>
+<td>This is a message that can be displayed to the end users. This is often useful in cases where there is an error.</td>
 </tr>
 <tr>
 <td>debug_info</td>
-<td>Contains information helpful when debugging</td>
+<td>Contains helpful information for debugging</td>
 </tr>
 </tbody></table>
 <h1 id='authentication'>Authentication</h1>
 <p>All authenticated calls to Hemato.AI API are expected to present an <code>Authorization</code> header containing a signed and not expired token.
-To obtain an authorization token you have 3 options.</p>
+To obtain an authorization token you have 3 options:</p>
 
 <ol>
-<li>Demo Authentication: this is only useful for development and testing purposes.</li>
+<li>Demo Authentication: for development and testing purposes.</li>
 <li>Session Based Authentication: you can provide a user name and password to obtain a newly minted and signed token.</li>
 <li>Public-Private Key: if you have a public key registered with Hemato.AI you can sign your own tokens. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. To learn more read <a href="#Register-Public-Key">How to register your public keys with hemato</a></li>
 </ol>
 <h2 id='demo-auth'>Demo Auth</h2>
 <blockquote>
-<p>To authorize, using Demo Authentication this code:</p>
+<p>To authorize, using Demo Authentication:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
 http https://api.hemato.ai/login/demo
@@ -449,7 +449,7 @@ curl <span class="s2">"https://api.hemato.ai/login/demo"</span>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h2 id='session-auth'>Session Auth</h2>
 <blockquote>
-<p>To authorize, using Session Authentication this code:</p>
+<p>To authorize, using Session Authentication:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># SECURITY RISK:</span>
 <span class="c"># Please ONLY use this for debugging login problems.</span>
@@ -470,8 +470,8 @@ curl <span class="s2">"https://api.hemato.ai/login/demo"</span>
     </span><span class="nl">"hemato_ai_auth_token"</span><span class="p">:</span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='public-priavte-key-auth'>Public / Priavte Key Auth</h2>
-<p>Detailed Instructions to be added here.</p>
+</span></code></pre></div><h2 id='public-private-key-auth'>Public / Private Key Auth</h2>
+<p>WIP: (Detailed instructions to be added)</p>
 
 <p>Hemato.AI expects for the API key to be included in majority of API requests to the server in a header that looks like the following:</p>
 
@@ -482,7 +482,7 @@ You must replace <code>HEMATO_AI_AUTH_TOKEN</code> with your personal API key.
 </aside>
 <h1 id='peripheral-blood-smear'>Peripheral Blood Smear</h1><h2 id='how-does-it-work'>How does it work?</h2>
 <p>Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
-That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI</p>
+That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI.</p>
 
 <p>To get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow this flow:</p>
 
@@ -496,7 +496,7 @@ That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI</p>
 <h2 id='1-get-an-id'>1. Get an ID</h2>
 <p>Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI&#39;s review.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p>Make a <code>POST</code> call to the <code>/pbs</code> endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find, retrive PBSs easier.
+<p>Make a <code>POST</code> call to the <code>/pbs</code> endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find and retrieve PBSs easier.
 <aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside></p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
 <span class="nb">echo</span> <span class="s1">'{"tags":{"patient_proxy_id":"}}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
@@ -517,11 +517,14 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
 </span></code></pre></div><h2 id='2-upload-the-files'>2. Upload the files</h2>
 <p>Upload the sample by calling the PBS upload API as many times as needed.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p>Make a <code>POST</code> call to the <code>/pbs/YOUR_NEW_PBS_ID/files</code> endpoint. Here <code>YOUR_NEW_PBS_ID</code> is the id you obtained from step 1 (<code>results.pbs_id</code> in the response structure returned).</p>
+<p>Make a <code>POST</code> call to the <code>/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg</code> endpoint. Here <code>YOUR_NEW_PBS_ID</code> is the id you obtained from step 1 (<code>results.pbs_id</code> in the response structure returned).</p>
 
-<p>This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.</p>
+<p>This api accepts an optional &quot;file_name&quot; and stors this along side the file. This can be later used for audit purposes.</p>
 
-<p>The file type is determined by the <code>Content-Type</code> header of your request. So when sending a requet to upload a jpg file for example, your request needs to have a header <code>Content-Type:image/jpeg</code>.
+<p>This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
+Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.</p>
+
+<p>The file type is determined by the <code>Content-Type</code> header of your request. So when sending a request to upload a jpg file for example, your request needs to have a header <code>Content-Type:image/jpeg</code>.
 This endpoint accepts:</p>
 
 <table><thead>
@@ -544,7 +547,10 @@ This endpoint accepts:</p>
 </tr>
 </tbody></table>
 
-<p>★ Zip files can containing jpg or png files.</p>
+<p>★ Zip files can contain jpg or png files.</p>
+
+<p>If the Content-Type header is missing, the file name extension for &quot;file_name&quot; provided is used to determine the file type.
+If no file type can be determined or provided, a 400 - Bad Request error is returned.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
 http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  &lt; /path/to/filename.jpg
 <span class="c"># alternatively use curl</span>
@@ -566,7 +572,7 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
 </span></code></pre></div>
 <aside class="warning">Notes:<ul>
 <li>Please note that this is NOT an HTTP multipart call with `Content-Type: multipart/form-data` </li>
-<li>Plaese note that this is not a form submission call either. The entir body of the request is
+<li>Plaese note that this is not a form submission call either. The entire body of the request is the image.
 </ul>
 </aside>
 <h2 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h2>
@@ -586,7 +592,7 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h2 id='4-wait-for-it'>4. Wait for it</h2>
-<p>Depending on the size of the files submitted and the number Diagnostic tasks requested and depending other factors, like general system workload. It will take between a few seconds to 10s of seconds for the results to be ready.</p>
+<p>Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.</p>
 
 <p>You can check the status of the task by making a GET call to /status</p>
 
@@ -603,9 +609,9 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 <code>json
 </code></p>
 </blockquote>
-<h2 id='5-get-the-report-for-a-peripheral-blood-seamr-study'>5. Get The Report for a Peripheral Blood Seamr Study</h2>
-<p>You can get the latest version of the report by makeing a GET call.
-In cases that there are multiple revisions and you want to get an ealier version of the report you need to specify the version.</p>
+<h2 id='5-get-the-report-for-a-peripheral-blood-smear-study'>5. Get The Report for a Peripheral Blood Smear Study</h2>
+<p>You can get the latest version of the report by making a GET call.
+In cases that there are multiple revisions and you want to get an earlier version of the report you need to specify the version.</p>
 
 <blockquote>
 <p>To get the latest diagnostic report on a PBS</p>
@@ -618,8 +624,16 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 <blockquote>
 <p>Which in turn returns a JSON structure like:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code></code></pre></div><h1 id='health-check'>Health Check</h1>
-<p>If you need to check the health status of the Hemato.AI you can make a GET call to the heartbeat endpoint</p>
+<div class="highlight"><pre class="highlight json tab-json"><code></code></pre></div>
+<p>There are 3 levels of report available.</p>
+
+<ol>
+<li>Morphological Findings</li>
+<li>Diagnostic Information</li>
+<li>Pathology Report</li>
+</ol>
+<h1 id='health-check'>Health Check</h1>
+<p>If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>http https://api.hemato.ai/heartbeat
 </code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"delta"</span><span class="p">:</span><span class="w"> </span><span class="s2">"59.078µs"</span><span class="p">,</span><span class="w">
@@ -628,10 +642,6 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
     </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bb_api.331.develop.18ff645"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h1 id='errors'>Errors</h1>
-<aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
-
 <p>The Hemato.AI API uses the following error codes:</p>
 
 <table><thead>
@@ -665,12 +675,8 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
 <td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
 </tr>
 <tr>
-<td>410</td>
-<td></td>
-</tr>
-<tr>
 <td>418</td>
-<td>I&#39;m a teapot.</td>
+<td>I&#39;m a teapot. (for debugging purposes)</td>
 </tr>
 <tr>
 <td>429</td>
