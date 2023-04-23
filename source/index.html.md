@@ -155,6 +155,9 @@ To get Hemato.AI's opinion on a Peripheral Blood Smear you follow this flow:
 4. Wait for it
 5. Ask for the report
 
+![Peripheral Blood Study Flow](PBSStudyFlow.png)
+
+
 ## 1. Get an ID
 Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
 
@@ -275,6 +278,15 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 
 > This returns
 ```json
+{
+  "status": 200,
+  "results": {
+    "report_status": "ready",
+    "progress": 1.0,
+    "progress_message":"Reports are ready",
+  },
+  "debug_info" :{}
+}
 ```
 
 
