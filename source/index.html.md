@@ -35,15 +35,15 @@ Most Hemato.AI API will return a JSON encoded response in this format.
 
 ```json
 {
-	"status": 401,
-	"error": "some error message",
-	"results": {
+  "status": 401,
+  "error": "some error message",
+  "results": {
 
-	},
-	"user_message": "",
-	"debug_info": {
+  },
+  "user_message": "",
+  "debug_info": {
 
-	}
+  }
 }
 
 ```
@@ -225,7 +225,7 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
   "status": 201,
   "results":{
     "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd",
-    "file_id":"296bca9e-4325-4da9-9e95-d0c84bdf1b97"
+    "file_id":"sha224-i-4d58b0cee1e38f75f93e2e605d1e6ad44c24a975d0c3b53367de7c86"
   },
   "debug_info":{
 
@@ -307,6 +307,34 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 > Which in turn returns a JSON structure like:
 
 ```json
+{
+	"status": 200,
+	"results": {
+		"pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
+		"file_id": "sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93",
+		"morphological_findings": {
+			"ring trophozoite": {
+				"count": "1",
+				"heat_map": [{
+					"center": [435, 345],
+					"radius": 35
+				}]
+			}
+		},
+		"diagnostic_report": {
+			"differential_diagnosis": [{
+				"score": 7,
+				"confidence": "0.95",
+				"clinical-significance": "D",
+				"icd10-code": "B50",
+				"english-long": "Malaria Infection with Plasmodium Falciparum",
+				"english-short": "Malaria"
+			}]
+		},
+		"pathology_report": "No demographics or past medical history is available about the patient. Inspection of peripheral blood slide revealed ring trophozoites ..."
+	},
+	"debug_info": {}
+}
 ```
 
 There are 3 levels of report available.
