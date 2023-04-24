@@ -1,4 +1,4 @@
-function hematoDocsVersion(): string {
-	 return "hemato.docs.463.main.27f922f";
+function hematoDocsVersion() {
+	 return "hemato.docs.464.main.61d1245";
 }
 //
