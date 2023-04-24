@@ -20,5 +20,5 @@ git add hematoDocsVersion.go
 
 echo "new version: hemato.docs.$NEWVER.$VERBASE"
 BODY="function hematoDocsVersion() {\n\treturn \"hemato.docs.$NEWVER.$BRANCH.$VERBASE\";\n}\n//"
-echo $BODY > source/javascripts/lib/hematoDocsWWWVersion.js
-git add source/javascripts/lib/hematoDocsWWWVersion.js
+echo $BODY > source/javascripts/lib/hematoDocsVersion.js
+git add source/javascripts/lib/hematoDocsVersion.js
