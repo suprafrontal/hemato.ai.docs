@@ -134,5 +134,20 @@ under the License.
         <% end %>
       </div>
     </div>
+</div>
+<!-- footer ------------------ -->
+<footer class="bg-white">
+  <div className="mt-1 grid w-full justify-items-stretch bg-white">
+  <div className="mx-2 inline-flex h-auto justify-self-center rounded bg-transparent px-1 text-xs text-pink-300">
+    <span id="versionSpan" className="text-pink-300">Version:&nbsp;</span>
+  </div>
+</footer>
+<script>
+  var tocFooter = document.getElementsByClassName("toc-footer")[0];
+  var li = document.createElement("li");
+  li.appendChild(document.createTextNode('V: ' + hematoDocsVersion()));
+  li.setAttribute("id", "version"); // added line
+  tocFooter.appendChild(li);
+</script>
   </body>
 </html>
