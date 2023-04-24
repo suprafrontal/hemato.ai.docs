@@ -388,6 +388,20 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 	"results": {
 		"pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
 		"file_id": "sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93",
+		"feature_statistics": {
+			"rbc-density": {
+				"value": "x",
+				"unit": "y"
+			},
+			"platelet-density": {
+				"value": "x",
+				"unit": "y"
+			},
+			"blast-density": {
+				"value": "x",
+				"unit": "y"
+			}
+		},
 		"morphological_findings": {
 			"ring trophozoite": {
 				"count": "1",
