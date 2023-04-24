@@ -1,8 +1,4 @@
-export class hematoDocsVersion {
-	String() {
-		return "hemato.docs.462.main.9c51570"
-	}
+function hematoDocsVersion(): string {
+	 return "hemato.docs.463.main.27f922f";
 }
-export default hematoDocsVersion;
-
 //
