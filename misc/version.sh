@@ -19,6 +19,6 @@ printf "package main\n\nfunc hematoDocsVersion() string {\n\treturn \"hemato.doc
 git add hematoDocsVersion.go
 
 echo "new version: hemato.docs.$NEWVER.$VERBASE"
-BODY="function hematoDocsVersion(): string {\n\t return \"hemato.docs.$NEWVER.$BRANCH.$VERBASE\";\n}\n//"
+BODY="function hematoDocsVersion() {\n\t return \"hemato.docs.$NEWVER.$BRANCH.$VERBASE\";\n}\n//"
 echo $BODY > source/javascripts/app/hematoDocsWWWVersion.js
 git add source/javascripts/app/hematoDocsWWWVersion.js
