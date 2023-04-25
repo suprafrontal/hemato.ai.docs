@@ -289,7 +289,7 @@
     </style>
     <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all-b12a2749.js"></script>
+      <script src="javascripts/all-e2688d6d.js"></script>
 
     <script>
       $(function() { setupCodeCopy(); });
@@ -317,6 +317,9 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#endpoints" class="toc-h1 toc-link" data-title="Endpoints">Endpoints</a>
           </li>
           <li>
             <a href="#http-responses" class="toc-h1 toc-link" data-title="HTTP Responses">HTTP Responses</a>
@@ -378,18 +381,38 @@
 <p>Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI&#39;s Diagnostic AI and Clinical Algorithms, which processes images of peripheral blood slides and generates hematopathology reports.</p>
 
 <p>We have language bindings in Go, (also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<h1 id='endpoints'>Endpoints</h1>
+<p>Hemato.AI API is made available at specific regional endpoints to adhere to regional regulations. Any data submitted to a regional endpoint will be handled on servers located within the same geographical and regulatory region.</p>
+
+<p>You can explicitly choose what region to use from this list:</p>
+
+<table><thead>
+<tr>
+<th>Region</th>
+<th>Endpoint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>USA</td>
+<td>https://us.api.hemato.ai</td>
+</tr>
+<tr>
+<td>Canada</td>
+<td>https://ca.api.hemato.ai</td>
+</tr>
+</tbody></table>
 <h1 id='http-responses'>HTTP Responses</h1>
 <p>Most Hemato.AI API will return a JSON encoded response in this format.</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some error message"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some error message"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
 
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nl">"user_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"user_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
 
-    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
@@ -493,6 +516,8 @@ That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI.</p
 <li>Wait for it</li>
 <li>Ask for the report</li>
 </ol>
+
+<p><img src="images/PBSStudyFlow-5a45cc0d.png" alt="Peripheral Blood Study Flow" /></p>
 <h2 id='1-get-an-id'>1. Get an ID</h2>
 <p>Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI&#39;s review.</p>
 <h3 id='http-request'>HTTP Request</h3>
@@ -563,7 +588,7 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span><span class="w">
   </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
     </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="s2">"c7d453a9-676d-4b9f-a505-8a9021b76dfd"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"file_id"</span><span class="p">:</span><span class="s2">"296bca9e-4325-4da9-9e95-d0c84bdf1b97"</span><span class="w">
+    </span><span class="nl">"file_id"</span><span class="p">:</span><span class="s2">"sha224-i-4d58b0cee1e38f75f93e2e605d1e6ad44c24a975d0c3b53367de7c86"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"debug_info"</span><span class="p">:{</span><span class="w">
 
@@ -577,22 +602,32 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
 </aside>
 <h2 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h2>
 <p>When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.</p>
+
+<p>Optionally you can register a <code>call_back_url</code> that will be called when the report is ready.
+The callback url needs to accept a POST call, and must support HTTPS with a valid server certificate. The body of the call will conform to <code>{&quot;pbs_stody_id&quot;:&quot;25f7de38-ba9c-4b45-a4d8-8c13461d7b39&quot;, &quot;report_status&quot;: &quot;ready&quot;, &quot;progress&quot;: 1.0}</code> but it can be ignored.
+So there are two approaches that users can take:
+1. Include the <code>pbs_study_id</code> or any other information you need (no PII or PHI) in the url to be called
+2. Use a single generic url, but parse and use the information in the body to identify which study is the subject of the call back.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
-<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"]}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "call_back_url":"https"}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 <span class="c"># alternatively use curl</span>
-<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"]}'</span> | curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--data-binary</span> @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "call_back_url":""}'</span> | curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--data-binary</span> @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 </code></pre></div>
 <blockquote>
 <p>The above command returns a JSON structure like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
-    </span><span class="nl">"pbs_id"</span><span class="p">:</span><span class="s2">"HEMATO_AI_AUTH_TOKEN"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"file_id"</span><span class="p">:</span><span class="s2">"296bca9e-4325-4da9-9e95-d0c84bdf1b97"</span><span class="w">
+    </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="s2">"48ae6352-d15d-440a-83f3-05a1f68aa11b"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"pbs_v1"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h2 id='4-wait-for-it'>4. Wait for it</h2>
 <p>Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.</p>
+
+<p>If you registerd a callback url in step 3, you can wait for that url to be called.</p>
 
 <p>You can check the status of the task by making a GET call to /status</p>
 
@@ -607,6 +642,16 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 <blockquote>
 <p>This returns
 <code>json
+{
+  &quot;status&quot;: 200,
+  &quot;results&quot;: {
+    &quot;pbs_study_id&quot;: &quot;62dd0300-880e-4069-bea8-66c9ca73c207&quot;,
+    &quot;report_status&quot;: &quot;ready&quot;,
+    &quot;progress&quot;: 1.0,
+    &quot;progress_message&quot;:&quot;Reports are ready&quot;,
+  },
+  &quot;debug_info&quot; :{}
+}
 </code></p>
 </blockquote>
 <h2 id='5-get-the-report-for-a-peripheral-blood-smear-study'>5. Get The Report for a Peripheral Blood Smear Study</h2>
@@ -624,7 +669,49 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 <blockquote>
 <p>Which in turn returns a JSON structure like:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code></code></pre></div>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4bb7fe9e-b608-4d68-adbe-8655c991f494"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"file_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"feature_statistics"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"rbc-density"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"x"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"y"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"platelet-density"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"x"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"y"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"blast-density"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"x"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"y"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"morphological_findings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"ring trophozoite"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"count"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"heat_map"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                    </span><span class="nl">"center"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">435</span><span class="p">,</span><span class="w"> </span><span class="mi">345</span><span class="p">],</span><span class="w">
+                    </span><span class="nl">"radius"</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="w">
+                </span><span class="p">}]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"diagnostic_report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"differential_diagnosis"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                </span><span class="nl">"score"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.95"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"clinical-significance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"icd10-code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"B50"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"english-long"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Malaria Infection with Plasmodium Falciparum"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"english-short"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Malaria"</span><span class="w">
+            </span><span class="p">}]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"pathology_report"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No demographics or past medical history is available about the patient. Inspection of peripheral blood slide revealed ring trophozoites ..."</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>There are 3 levels of report available.</p>
 
 <ol>
@@ -701,5 +788,21 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
           </div>
       </div>
     </div>
+</div>
+<!-- footer ------------------ -->
+<footer class="bg-white">
+  <div className="mt-1 grid w-full justify-items-stretch bg-white">
+  <div className="mx-2 inline-flex h-auto justify-self-center rounded bg-transparent px-1 text-xs text-pink-300">
+    <span id="versionSpan" className="text-pink-300">Version:&nbsp;</span>
+  </div>
+</footer>
+<script>
+  var tocFooter = document.getElementsByClassName("toc-footer")[0];
+  var li = document.createElement("li");
+  li.appendChild(document.createTextNode('V: ' + hematoDocsVersion()));
+  li.setAttribute("id", "version"); // added line
+  tocFooter.appendChild(li);
+</script>
   </body>
+  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "24ac413283304895aab4128d7b67e266"}'></script><!-- End Cloudflare Web Analytics -->
 </html>
