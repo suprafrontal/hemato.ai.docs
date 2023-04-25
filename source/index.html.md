@@ -29,6 +29,16 @@ Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI
 
 We have language bindings in Go, (also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
+# Endpoints
+Hemato.AI API is made available at specific regional endpoints to adhere to regional regulations. Any data submitted to a regional endpoint will be handled on servers located within the same geographical and regulatory region.
+
+You can explicitly choose what region to use from this list:
+
+Region | Endpoint
+-------|--------------------------
+USA    | https://us.api.hemato.ai
+Canada | https://ca.api.hemato.ai
+
 # HTTP Responses
 
 Most Hemato.AI API will return a JSON encoded response in this format.
