@@ -253,12 +253,18 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 ## 3. Request a Diagnostic Study
 When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
 
+Optionally you can register a `call_back_url` that will be called when the report is ready.
+The callback url needs to accept a POST call, and must support HTTPS with a valid server certificate. The body of the call will conform to `{"pbs_stody_id":"25f7de38-ba9c-4b45-a4d8-8c13461d7b39", "report_status": "ready", "progress": 1.0}` but it can be ignored.
+So there are two approaches that users can take:
+1. Include the `pbs_study_id` or any other information you need (no PII or PHI) in the url to be called
+2. Use a single generic url, but parse and use the information in the body to identify which study is the subject of the call back.
+
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"diagnostic_tasks":["pbs_v1"]}' | http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"diagnostic_tasks":["pbs_v1"], "call_back_url":"https"}' | http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-echo '{"diagnostic_tasks":["pbs_v1"]}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+echo '{"diagnostic_tasks":["pbs_v1"], "call_back_url":""}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 ```
 
 > The above command returns a JSON structure like this:
@@ -266,14 +272,19 @@ echo '{"diagnostic_tasks":["pbs_v1"]}' | curl -x POST --header "Authorization:HE
 ```json
 {
   "results":{
-    "pbs_id":"HEMATO_AI_AUTH_TOKEN",
-    "file_id":"296bca9e-4325-4da9-9e95-d0c84bdf1b97"
+    "pbs_study_id":"48ae6352-d15d-440a-83f3-05a1f68aa11b",
+    "tasks": [
+      "pbs_v1"
+    ]
   }
 }
 ```
 
+
 ## 4. Wait for it
 Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.
+
+If you registerd a callback url in step 3, you can wait for that url to be called.
 
 You can check the status of the task by making a GET call to /status
 
@@ -291,6 +302,7 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOU
 {
   "status": 200,
   "results": {
+    "pbs_study_id": "62dd0300-880e-4069-bea8-66c9ca73c207",
     "report_status": "ready",
     "progress": 1.0,
     "progress_message":"Reports are ready",
