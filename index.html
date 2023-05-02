@@ -290,14 +290,14 @@
     </style>
     <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all-78a8e82a.js"></script>
+      <script src="javascripts/all-ce55d38a.js"></script>
 
     <script>
       $(function() { setupCodeCopy(); });
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;go&quot;,&quot;python&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;go&quot;,&quot;typescript&quot;,&quot;python&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -309,6 +309,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
               <a href="#" data-language-name="go">go</a>
+              <a href="#" data-language-name="typescript">typescript</a>
               <a href="#" data-language-name="python">python</a>
         </div>
         <div class="search">
@@ -329,36 +330,24 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#demo-auth" class="toc-h2 toc-link" data-title="Demo Auth">Demo Auth</a>
-                  </li>
-                  <li>
                     <a href="#session-auth" class="toc-h2 toc-link" data-title="Session Auth">Session Auth</a>
                   </li>
                   <li>
                     <a href="#public-private-key-auth" class="toc-h2 toc-link" data-title="Public / Private Key Auth">Public / Private Key Auth</a>
                   </li>
+                  <li>
+                    <a href="#jwt-specifications" class="toc-h2 toc-link" data-title="JWT Specifications">JWT Specifications</a>
+                  </li>
               </ul>
           </li>
           <li>
-            <a href="#peripheral-blood-smear" class="toc-h1 toc-link" data-title="Peripheral Blood Smear">Peripheral Blood Smear</a>
+            <a href="#get-a-pbs-report" class="toc-h1 toc-link" data-title="Get a PBS Report">Get a PBS Report</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#how-does-it-work" class="toc-h2 toc-link" data-title="How does it work?">How does it work?</a>
+                    <a href="#workflow-1" class="toc-h2 toc-link" data-title="Workflow 1">Workflow 1</a>
                   </li>
                   <li>
-                    <a href="#1-get-an-id" class="toc-h2 toc-link" data-title="1. Get an ID">1. Get an ID</a>
-                  </li>
-                  <li>
-                    <a href="#2-upload-the-files" class="toc-h2 toc-link" data-title="2. Upload the files">2. Upload the files</a>
-                  </li>
-                  <li>
-                    <a href="#3-request-a-diagnostic-study" class="toc-h2 toc-link" data-title="3. Request a Diagnostic Study">3. Request a Diagnostic Study</a>
-                  </li>
-                  <li>
-                    <a href="#4-wait-for-it" class="toc-h2 toc-link" data-title="4. Wait for it">4. Wait for it</a>
-                  </li>
-                  <li>
-                    <a href="#5-get-the-report-for-a-peripheral-blood-smear-study" class="toc-h2 toc-link" data-title="5. Get The Report for a Peripheral Blood Smear Study">5. Get The Report for a Peripheral Blood Smear Study</a>
+                    <a href="#workflow-2" class="toc-h2 toc-link" data-title="Workflow 2">Workflow 2</a>
                   </li>
               </ul>
           </li>
@@ -381,9 +370,15 @@
         <h1 id='introduction'>Introduction</h1>
 <p>Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI&#39;s Diagnostic AI and Clinical Algorithms, which processes images of peripheral blood slides and generates hematopathology reports.</p>
 
-<p>We have language bindings in Go, (also Python, C#, and TypeScript coming in future)! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>Examples on this page are in shell script and language bindings in Go, Typescript, Python, C#, and TypeScript coming in future! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
 <h1 id='endpoints'>Endpoints</h1>
 <p>Hemato.AI API is made available at specific regional endpoints to adhere to regional regulations. Any data submitted to a regional endpoint will be handled on servers located within the same geographical and regulatory region.</p>
+
+<p>All Hemato.AI API endpoints are only available through encrypted (TLS) connections.</p>
+
+<p>There are a few special purpose endpoints that are not region specific:
+- For development and testing purposes anyone can use the Dev endpoint. To use this endpint you need to be assigned developer credentials. This endpoint is not HIPAA compliant and should not be used for any production purposes. Information submited to this service is not protected by any privacy laws and may be inspected by Hemato.AI staff.
+- For external quality assurance and external automated testing you can use the QA endpoint. Specially it is imporant to run automated benchmarks agains this endpoint before any significant change to your hardware or sofrwre that has the potential to affect the quality, or clinical validity of the outputs. To use this endpoint you need QA credentials. This endpoint is not HIPAA compliant and should not be used for any production purposes. Information submited to this service is not protected by any privacy laws and may be inspected by Hemato.AI staff.</p>
 
 <p>You can explicitly choose what region to use from this list:</p>
 
@@ -391,31 +386,48 @@
 <tr>
 <th>Region</th>
 <th>Endpoint</th>
+<th>Users</th>
 </tr>
 </thead><tbody>
 <tr>
+<td>DEV</td>
+<td>https://dev.api.hemato.ai</td>
+<td>for development and testing purposes</td>
+</tr>
+<tr>
+<td>QA</td>
+<td>https://qa.api.hemato.ai</td>
+<td>for external quality assurance and external automated testing</td>
+</tr>
+<tr>
 <td>USA</td>
 <td>https://us.api.hemato.ai</td>
+<td>Production, for customers in the United States</td>
 </tr>
 <tr>
 <td>Canada</td>
 <td>https://ca.api.hemato.ai</td>
+<td>Production, for customers in Canada</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>https://eu.api.hemato.ai</td>
+<td>Production, for customers in the European Union</td>
 </tr>
 </tbody></table>
 <h1 id='http-responses'>HTTP Responses</h1>
 <p>Most Hemato.AI API will return a JSON encoded response in this format.</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some error message"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
   </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
 
   </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error message if any"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"user_message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
   </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-
+    </span><span class="err">//</span><span class="w"> </span><span class="err">helpful</span><span class="w"> </span><span class="err">information</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">debugging</span><span class="p">,</span><span class="w"> </span><span class="err">except</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">auth</span><span class="w"> </span><span class="err">debugging</span><span class="p">,</span><span class="w"> </span><span class="err">see</span><span class="w"> </span><span class="err">Auth</span><span class="w"> </span><span class="err">section</span><span class="w"> </span><span class="err">below</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
 </span></code></pre></div>
 <table><thead>
 <tr>
@@ -425,7 +437,7 @@
 </thead><tbody>
 <tr>
 <td>status</td>
-<td>This reflects the <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP Status code</a></td>
+<td>This reflects the <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP Status code</a> of the response.</td>
 </tr>
 <tr>
 <td>error</td>
@@ -445,33 +457,38 @@
 </tr>
 </tbody></table>
 <h1 id='authentication'>Authentication</h1>
-<p>All authenticated calls to Hemato.AI API are expected to present an <code>Authorization</code> header containing a signed and not expired token.
-To obtain an authorization token you have 3 options:</p>
+<p>All authenticated calls to Hemato.AI API are expected to present an <code>Authorization</code> header containing a signed and valid token.
+To obtain an authorization token you have 2 options:</p>
 
 <ol>
-<li>Demo Authentication: for development and testing purposes.</li>
-<li>Session Based Authentication: you can provide a user name and password to obtain a newly minted and signed token.</li>
-<li>Public-Private Key: if you have a public key registered with Hemato.AI you can sign your own tokens. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. To learn more read <a href="#Register-Public-Key">How to register your public keys with hemato</a></li>
+<li><strong>Session Based Authentication:</strong> you can call the <code>/auth/login</code> endpoint for a specific region and provide a user-name and password-hash (sha256 of the actual password) to obtain a newly minted and signed token. Session Auth is best suited for interactive applications where a user is directly involved in the process of obtaining the token. Example use cases are web applications, mobile apps, and desktop applications where individual users have Hemato.AI accounts. If you have a user facing application but your users don&#39;t hold individual Hemato.AI credentials, you can use the Public-Private Key authentication method below.</li>
+<li><strong>Public-Private Key:</strong> you can create your own Public-Private key paris, and register your public keys with Hemato.AI. Then you can sign your own tokens using the private key associate with the public keys you registered with Hemato.AI. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. Examples a hardware device digitizes samples and needs to call Hemato.AI to obtain an interpretation of the sample. Or you have a mobile app and allows the users to interact with Hemato.AI but the users don&#39;t hold individual Hemato.AI accounts. To learn more read <a href="#Register-Public-Key">How to register your public keys with hemato</a></li>
 </ol>
-<h2 id='demo-auth'>Demo Auth</h2>
-<blockquote>
-<p>To authorize, using Demo Authentication:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
-http https://api.hemato.ai/login/demo
-<span class="c"># or use curl, you can just pass the correct header with each request</span>
-curl <span class="s2">"https://api.hemato.ai/login/demo"</span>
-</code></pre></div><div class="highlight"><pre class="highlight go tab-go"><code><span class="c">// Not implemented yet</span>
+<h2 id='session-auth'>Session Auth</h2><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># SECURITY RISK:</span>
+<span class="c"># Please ONLY use this for debugging login problems.</span>
+<span class="c"># MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.</span>
+<span class="c"># otherwise your plan password will remain in your shell history and possibly leak into backups and such.</span>
+
+<span class="nb">echo</span> <span class="nt">-n</span> YOUR_ACTUAL_PASSWORD | shasum <span class="nt">-a</span> 256 | <span class="nb">cut</span> <span class="nt">-d</span> <span class="s1">' '</span> <span class="nt">-f</span> 1
+</code></pre></div><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"crypto/sha256"</span>
+    <span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">shasum</span> <span class="o">:=</span> <span class="n">sha256</span><span class="o">.</span><span class="n">Sum256</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="s">"YOUR_ACTUAL_PASSWORD"</span><span class="p">))</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%x"</span><span class="p">,</span> <span class="n">shasum</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight typescript tab-typescript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">CryptoJS</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">crypto</span><span class="dl">'</span>
+<span class="kd">const</span> <span class="nx">passSha</span> <span class="o">=</span> <span class="nx">CtryptoJS</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">(</span><span class="dl">'</span><span class="s1">YOUR_ACTUAL_PASSWORD</span><span class="dl">'</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">passSha</span><span class="p">)</span>
 </code></pre></div>
-<blockquote>
-<p>The above command returns a JSON structure like this:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
-    </span><span class="nl">"hemato_ai_auth_token"</span><span class="p">:</span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='session-auth'>Session Auth</h2>
+<p>For interactive use cases, where you or your users hold individual Hemato.AI accounts, you can use the Session Auth method. This method is best suited for web applications, mobile apps, and desktop applications where individual users have Hemato.AI accounts.</p>
+
+<p>This call does NOT accept the raw user password. Instead you need to provide the sha256 hash of the password. This is to prevent the password from being leaked in internet trafic capture or intercepted on device or in transit. Of course all Hemato.AI endpoints are only available only through encrypted (TLS) connections. Still there are scenarios that a client browser or tools might allow for interception of traffic. You can use the following command to generate the sha256 hash of your password:</p>
+
 <blockquote>
 <p>To authorize, using Session Authentication:</p>
 </blockquote>
@@ -490,25 +507,156 @@ curl <span class="s2">"https://api.hemato.ai/login/demo"</span>
 <p>The above command returns a JSON structure like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"results"</span><span class="p">:{</span><span class="w">
-    </span><span class="nl">"hemato_ai_auth_token"</span><span class="p">:</span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"login_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1682945428455621477"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"HY_APP_AUTH_v1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9E....."</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ali@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"03349841-588d-56b3-b93c-52d0983f9c75"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"screen_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ali"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"user_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ali@example.com"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"debug_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"delta"</span><span class="p">:</span><span class="w"> </span><span class="s2">"463.021938ms"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bb_api.362.pbs_tasks.dfd119b"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h2 id='public-private-key-auth'>Public / Private Key Auth</h2>
-<p>WIP: (Detailed instructions to be added)</p>
+<p>You can sign your own Authentications headers, see <a href="#JWT-Specifications">JWT specifications</a>.</p>
 
-<p>Hemato.AI expects for the API key to be included in majority of API requests to the server in a header that looks like the following:</p>
+<p>A self-service dashboard to register your public keys is coming soon. In the meantime, please contact us to register your public keys.</p>
+<h2 id='jwt-specifications'>JWT Specifications</h2>
+<p>If you are using Public-Private Key Auth, you will be generating and signing your own Authorizaiton headers.
+Hemato.AI authorization headers are JSON Web Tokens (JWT) (more info at (https://jwt.io/)[https://jwt.io/]).</p>
+<h3 id='suppoted-signing-algorithms'>Suppoted Signing Algorithms</h3>
+<p>Curently only <code>RS256</code> (RSASSA-PKCS-v1.5 using SHA-256) is allowed.</p>
+<h3 id='required-fields'>Required Fields</h3>
+<p>All the fields in this table are required.
+All keys and values are case sensitive.
+All JWTs need to be BASE64 encoded when used as Authorization headers.</p>
 
-<p><code>Authorization:HEMATO_AI_AUTH_TOKEN</code></p>
+<table><thead>
+<tr>
+<th>JWT Claim</th>
+<th>Abbreviated</th>
+<th>Data Type</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Token ID</td>
+<td><code>jti</code></td>
+<td>String</td>
+<td>A unique ID for each token. Most useful for audit, debugging and investigation of issues. UUID or high resolution timestamps can be used.</td>
+</tr>
+<tr>
+<td>Issuer</td>
+<td><code>iss</code></td>
+<td>String</td>
+<td>This is the identifier of your organization.</td>
+</tr>
+<tr>
+<td>Issed at</td>
+<td><code>iat</code></td>
+<td>Unix Time aka IntDate</td>
+<td>The time the token was issues. A token issued in future is invalid. A token more than 1 hour is considered expired.</td>
+</tr>
+<tr>
+<td>Expiraion</td>
+<td><code>exp</code></td>
+<td>Unix Time aka IntDate</td>
+<td>The time this token will expire and be invalid.  A token more than 1 hour is considered expired, regardless of this value.</td>
+</tr>
+<tr>
+<td>Audience</td>
+<td><code>aud</code></td>
+<td>String</td>
+<td>This needs to match the domain and region you are calling. Examples are: <code>us.api.hemato.ai</code> or <code>dev.api.hemato.ai</code></td>
+</tr>
+<tr>
+<td>----------</td>
+<td>-------------</td>
+<td>-----------------------</td>
+<td>----------------------------------</td>
+</tr>
+<tr>
+<td>User ID</td>
+<td><code>uid</code></td>
+<td>String</td>
+<td>This needs to be one of the user ids from the same organization where the signing key belongs to and this use must have permission to access to region.</td>
+</tr>
+<tr>
+<td>----------</td>
+<td>-------------</td>
+<td>-----------------------</td>
+<td>----------------------------------</td>
+</tr>
+<tr>
+<td>Key ID *</td>
+<td><code>kid</code></td>
+<td>String</td>
+<td>Only required if using <code>RS256</code> signing algorithm. This is the ID of the public key that was used to sign the token.</td>
+</tr>
+<tr>
+<td>----------</td>
+<td>-------------</td>
+<td>-----------------------</td>
+<td>----------------------------------</td>
+</tr>
+</tbody></table>
+<h3 id='how-to-create-your-own-keys'>How to create your own keys</h3><div class="highlight"><pre class="highlight shell tab-shell"><code>ssh-keygen <span class="nt">-t</span> rsa <span class="nt">-b</span> 4096 <span class="nt">-m</span> PEM <span class="nt">-f</span> jwtRS256.key
+<span class="c"># Don't add passphrase</span>
+openssl rsa <span class="nt">-in</span> jwtRS256.key <span class="nt">-pubout</span> <span class="nt">-outform</span> PEM <span class="nt">-out</span> jwtRS256.key.pub
+<span class="nb">cat </span>jwtRS256.key
+<span class="nb">cat </span>jwtRS256.key.pub
+</code></pre></div><h3 id='example'>Example</h3>
+<p>On the right you can see an example of a Hemato.AI JWT</p>
 
-<aside class="notice">
-You must replace <code>HEMATO_AI_AUTH_TOKEN</code> with your personal API key.
-</aside>
-<h1 id='peripheral-blood-smear'>Peripheral Blood Smear</h1><h2 id='how-does-it-work'>How does it work?</h2>
+<blockquote>
+<p>This is the structure of a Hemato.AI JWT
+<code>json
+{
+  &quot;alg&quot;:&quot;HS256&quot;, // or RS256
+  &quot;typ&quot;:&quot;JWT&quot;
+}
+.
+{
+  &quot;aud&quot;: [
+    &quot;us.api.hemato.ai&quot;,
+  ],
+  &quot;exp&quot;: 1683095428,
+  &quot;iat&quot;: 1682945428,
+  &quot;iss&quot;: &quot;1stdevision.example.com&quot;,
+  &quot;jti&quot;: &quot;2d33d1d518&quot;,
+  &quot;sub&quot;: &quot;1st_devision_api_user&quot;,
+  &quot;uid&quot;: &quot;01234567-789d-46b7-b38c-45d4562f5c12&quot;,
+  &quot;kid&quot;: &quot;01234567-789d-46b7-b38c-45d4562f5c12&quot;
+}
+</code></p>
+</blockquote>
+<h3 id='debugging-jwts'>Debugging JWTs</h3>
+<p>You can decode and inspect your JWTs at <a href="https://jwt.io/">https://jwt.io/</a></p>
+
+<p>You can also make a call to <code>/auth/hello</code> endpoint and get more helpful information about your JWT and reasons it may be rejected.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># if you are using httpie</span>
+http <span class="nt">-f</span> POST https://dev.api.hemato.ai/auth/helo Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="c"># if you are using curl</span>
+curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> https://api.hemato.ai/auth/hello
+</code></pre></div><h1 id='get-a-pbs-report'>Get a PBS Report</h1>
 <p>Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
 That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI.</p>
 
-<p>To get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow this flow:</p>
+<p>There are two workflows available to get Hemato.AI to study a peripheral blood sample and generate morphological, diagnostic and pathology reports.</p>
+
+<p>In <strong>Workflow 1</strong>, you make API calls to upload the images, request a diagnostic study and get the results.</p>
+
+<p>In <strong>Workflow 2</strong>, you make an API call to provide a link where Hemato.AI can download your files and then you can make an API call to get the results.</p>
+<h2 id='workflow-1'>Workflow 1</h2>
+<p>In workflow 1, to get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow these steps:</p>
 
 <ol>
 <li>Get an ID for your new PBS</li>
@@ -518,10 +666,10 @@ That&#39;s why there are a few steps to submit a PBS for review by Hemato.AI.</p
 <li>Ask for the report</li>
 </ol>
 
-<p><img src="images/PBSStudyFlow-5a45cc0d.png" alt="Peripheral Blood Study Flow" /></p>
-<h2 id='1-get-an-id'>1. Get an ID</h2>
+<p><img src="images/PBSStudyWorkflow1-5a45cc0d.png" alt="Peripheral Blood Study Flow 1" /></p>
+<h3 id='1-get-an-id'>1. Get an ID</h3>
 <p>Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI&#39;s review.</p>
-<h3 id='http-request'>HTTP Request</h3>
+<h4 id='http-request'>HTTP Request</h4>
 <p>Make a <code>POST</code> call to the <code>/pbs</code> endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find and retrieve PBSs easier.
 <aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside></p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
@@ -540,9 +688,9 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
     </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="s2">"c7d453a9-676d-4b9f-a505-8a9021b76dfd"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='2-upload-the-files'>2. Upload the files</h2>
+</span></code></pre></div><h3 id='2-upload-the-files'>2. Upload the files</h3>
 <p>Upload the sample by calling the PBS upload API as many times as needed.</p>
-<h3 id='http-request-2'>HTTP Request</h3>
+<h4 id='http-request-2'>HTTP Request</h4>
 <p>Make a <code>POST</code> call to the <code>/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg</code> endpoint. Here <code>YOUR_NEW_PBS_ID</code> is the id you obtained from step 1 (<code>results.pbs_id</code> in the response structure returned).</p>
 
 <p>This api accepts an optional &quot;file_name&quot; and stors this along side the file. This can be later used for audit purposes.</p>
@@ -601,18 +749,24 @@ curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span clas
 <li>Plaese note that this is not a form submission call either. The entire body of the request is the image.
 </ul>
 </aside>
-<h2 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h2>
+<h3 id='3-request-a-diagnostic-study'>3. Request a Diagnostic Study</h3>
 <p>When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.</p>
 
-<p>Optionally you can register a <code>call_back_url</code> that will be called when the report is ready.
+<p>Optionally you can register a <code>callback_url</code> that will be called when the report is ready.
+We’ll send a POST request to the callback URL with details of the report when ready.
 The callback url needs to accept a POST call, and must support HTTPS with a valid server certificate. The body of the call will conform to <code>{&quot;pbs_stody_id&quot;:&quot;25f7de38-ba9c-4b45-a4d8-8c13461d7b39&quot;, &quot;report_status&quot;: &quot;ready&quot;, &quot;progress&quot;: 1.0}</code> but it can be ignored.
 So there are two approaches that users can take:
-1. Include the <code>pbs_study_id</code> or any other information you need (no PII or PHI) in the url to be called
+1. Include the <code>pbs_study_id</code> or any other information you need (no PII or PHI) in the url to be called.
 2. Use a single generic url, but parse and use the information in the body to identify which study is the subject of the call back.</p>
+
+<p>Although it is not strictly needed, we recommend you include a cryptographic signature as part of your URL, to that you can verify the authenticity of the cells to your endpoint. Example:
+<code>{&quot;callback_url&quot;:&quot;https://example.com/pbs_report_is_ready/&lt;PBS_STUDY_ID&gt;/&lt;timestamped_cryptographic_signature_valid_only_for_this_PBS_STUDY_ID&gt;&quot;</code></p>
+
+<p>This enables early filtration of incoming traffic, particularly in cases where the backend systems may be inundated by a surge of malicious or rogue requests.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># use httpie from https://httpie.io/</span>
-<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "call_back_url":"https"}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/&lt;PBS_STUDY_ID&gt;/"}'</span> | http <span class="nt">-f</span> POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 <span class="c"># alternatively use curl</span>
-<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "call_back_url":""}'</span> | curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--data-binary</span> @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+<span class="nb">echo</span> <span class="s1">'{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/&lt;PBS_STUDY_ID&gt;/"}'</span> | curl <span class="nt">-x</span> POST <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_AUTH_TOKEN"</span> <span class="nt">--data-binary</span> @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 </code></pre></div>
 <blockquote>
 <p>The above command returns a JSON structure like this:</p>
@@ -625,7 +779,7 @@ So there are two approaches that users can take:
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='4-wait-for-it'>4. Wait for it</h2>
+</span></code></pre></div><h3 id='4-wait-for-it'>4. Wait for it</h3>
 <p>Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.</p>
 
 <p>If you registerd a callback url in step 3, you can wait for that url to be called.</p>
@@ -655,7 +809,7 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 }
 </code></p>
 </blockquote>
-<h2 id='5-get-the-report-for-a-peripheral-blood-smear-study'>5. Get The Report for a Peripheral Blood Smear Study</h2>
+<h3 id='5-get-the-report-for-a-peripheral-blood-smear-study'>5. Get The Report for a Peripheral Blood Smear Study</h3>
 <p>You can get the latest version of the report by making a GET call.
 In cases that there are multiple revisions and you want to get an earlier version of the report you need to specify the version.</p>
 
@@ -674,7 +828,7 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
     </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
     </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4bb7fe9e-b608-4d68-adbe-8655c991f494"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"file_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"file_ids"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"</span><span class="p">],</span><span class="w">
         </span><span class="nl">"feature_statistics"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
             </span><span class="nl">"rbc-density"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
                 </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"x"</span><span class="p">,</span><span class="w">
@@ -720,6 +874,81 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
 <li>Diagnostic Information</li>
 <li>Pathology Report</li>
 </ol>
+<h2 id='workflow-2'>Workflow 2</h2>
+<p>In workflow 2, to get Hemato.AI&#39;s opinion on a Peripheral Blood Smear you follow these steps:</p>
+
+<ol>
+<li>Submit a url from which Hemato.AI can download the files and get an Study ID back (you can use this ID to check the status of the study and get the report)</li>
+<li>Optionally provide a callback url</li>
+<li>Wait for it</li>
+<li>Get a callback, with information about the sample, dwnloaded file size and formats and sanity checks.</li>
+<li>Wait for it</li>
+<li>Get a callback, with information about the report, and a link to the report</li>
+<li>Check the status of the study and get the report</li>
+</ol>
+
+<p><img src="images/PeripheralBloodWorkflows-1377eec7.png" alt="Peripheral Blood Study Flow 2" /></p>
+<h3 id='1-2-3-submit-a-url-from-which-hemato-ai-can-download-the-files-and-get-an-study-id-back'>1,2,3. Submit a url from which Hemato.AI can download the files and get an Study ID back</h3>
+<p>You can make a POST call to <code>/pbs</code> with a url to retrieve a list of files from. this call will return a Study ID that you can use to check the status of the study and get the report.
+The call needs to include a list of diagnstic tasks that you want to be performed on the files.
+The list of files returned by the provided list_url can be a list of presigned urls to files in an S3 bucket, or a list of urls to files in a publically accessible location, or in some other way need to be accessible to Hemato.AI.</p>
+
+<p>The body of this POST request will look like the example on the right:</p>
+
+<blockquote>
+<p>Request body to start &quot;Workflow 2&quot;</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"list_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com/samples/1/files.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"pbs_v1"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>On the right you can see an example of the list of files that will be downloaded by Hemato.AI as a single periheral blood study.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"peripheral_blood_sample_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62dd0300-880e-4069-bea8-66c9ca73c207"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"patient_proxy_medical_record_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sample_collection_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-02T15:0405+07:00"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">RFC</span><span class="mi">3339</span><span class="w"> </span><span class="err">formated</span><span class="w"> </span><span class="err">date</span><span class="w"> </span><span class="err">time</span><span class="w">
+  </span><span class="nl">"clinical_tasks_requested"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"pbs_v1"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"files"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"https://presignedurldemo.s3.eu-west-2.amazonaws.com/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJWZ7B6WCRGMKFGQ%2F20180210%2Feu-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20180210T171315Z&amp;X-Amz-Expires=1800&amp;X-Amz-Signature=12b74b0788aa036bc7c3d03b3f20c61f1f91cc9ad8873e3314255dc479a25351&amp;X-Amz-SignedHeaders=host"</span><span class="p">,</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"callback_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com/callbacks/1"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>To submit a url to a Peripheral Blood Smear Study</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nb">echo</span> <span class="s1">'{"peripheral_blood_sample_id":"xyz", "patient_proxy_medical_record_number":"abc", ... }'</span> | http <span class="nt">-F</span> POST https://dev.api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+</code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"pbs_study_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4bb7fe9e-b608-4d68-adbe-8655c991f494"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"file_ids"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"</span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='4-5-receive-a-callback-with-information-about-the-sample-downloaded-file-size-and-formats-and-sanity-checks'>4,5 Receive a callback with information about the sample, downloaded file size and formats and sanity checks.</h3>
+<p>When the study has been downloaded and the files have been checked for sanity, you will receive a callback to the callback_url you provided in the previous step.</p>
+
+<p>The example on the right shows the body of a callback request.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='6-receive-a-callback-with-information-about-the-report-and-a-link-to-the-report'>6 Receive a callback with information about the report, and a link to the report</h3>
+<p>When the study has been analysed and the report is ready, you will receive a callback to the callback_url you provided in the previous step.</p>
+
+<p>The example on the right shows the body of a callback request.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='7-check-the-status-of-the-study-and-get-the-report'>7 Check the status of the study and get the report</h3>
+<p>You can make a GET call to <code>/pbs/{pbs_study_id}/status</code> to get the status of the study and the report.</p>
+
+<p>To retrive the reports you can make a call to <code>/pbs/{pbs_study_id}/report</code>.
+for more information see the same call in &quot;workflow 1&quot; above (step: get the report for peripheral blood study).</p>
 <h1 id='health-check'>Health Check</h1>
 <p>If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>http https://api.hemato.ai/heartbeat
@@ -785,6 +1014,7 @@ curl <span class="nt">--header</span> <span class="s2">"Authorization:HEMATO_AI_
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
                 <a href="#" data-language-name="go">go</a>
+                <a href="#" data-language-name="typescript">typescript</a>
                 <a href="#" data-language-name="python">python</a>
           </div>
       </div>
