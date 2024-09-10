@@ -15,19 +15,19 @@ cp -r build/* static/
 
 
 echo CLOUD BUILDING
-gcloud builds submit --tag gcr.io/stimulator/docs.hemato.ai --timeout=3m
+gcloud builds submit --tag gcr.io/stimulator/docs.in.hemato.ai --timeout=3m
 echo success
 echo -------------------
 
 echo DEPLOYING
-gcloud beta run deploy docs-hemato-ai \
+gcloud beta run deploy docs-in-hemato-ai \
   --labels service=docs-hemato-ai,version="${VERSION}",commit=${COMMIT} \
   --region us-east1 \
   --timeout=1m \
   --use-http2 \
   --cpu 2 \
   --memory 2Gi \
-  --image gcr.io/stimulator/docs.hemato.ai \
+  --image gcr.io/stimulator/docs.in.hemato.ai \
   --platform managed
 
 rm -rf static

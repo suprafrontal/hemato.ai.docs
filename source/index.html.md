@@ -136,9 +136,9 @@ This call does NOT accept the raw user password. Instead you need to provide the
 # otherwise your plan password will remain in your shell history and possibly leak into backups and such.
 export PASS_SHA_256=`echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1`
 # use httpie from https://httpie.io/
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://api.hemato.ai/auth/login
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://api.in.hemato.ai/auth/login
 # or use curl, you can just pass the correct header with each request
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://api.hemato.ai/auth/login"
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://api.in.hemato.ai/auth/login"
 ```
 
 ```go
@@ -251,45 +251,42 @@ You can also make a call to `/auth/hello` endpoint and get more helpful informat
 # if you are using httpie
 http -f POST https://dev.api.hemato.ai/auth/hello Authorization:HEMATO_AI_AUTH_TOKEN
 # if you are using curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/auth/hello
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/auth/hello
 ```
 
 
-# Get a PBS Report
+# Get a Detection Report
 
-Images of Peripheral Blood Smears (PBS) usually are very large. It is often impractical to submit an entire sample in one API call.
-That's why there are a few steps to submit a PBS for review by Hemato.AI.
+## Workflow
 
-There are two workflows available to get Hemato.AI to study a peripheral blood sample and generate morphological, diagnostic and pathology reports.
+To get Hemato.AI's detection report on a Peripheral Blood Smear you can follow these steps:
 
-In **Workflow 1**, you make API calls to upload the images, request a diagnostic study and get the results.
-
-In **Workflow 2**, you make an API call to provide a link where Hemato.AI can download your files and then you can make an API call to get the results.
-
-## Workflow 1
-
-In workflow 1, to get Hemato.AI's opinion on a Peripheral Blood Smear you follow these steps:
-
-1. Get an ID for your new PBS
-2. Upload the files under the new ID
-3. Request a Diagnostic Study
-4. Wait for it
-5. Ask for the report
+1. Get an ID for your new PBS Study
+1. Optionally provide a callback URL
+1. Upload the files under the new ID
+1. Request a Diagnostic Study
+1. Optionally listen for a callback, with information about the sample, dwnloaded file size and formats and sanity checks.
+1. Wait for it
+1. Optionally listen for a callback, with information about the outcome of the detection study
+1. Ask for the report
 
 ![Peripheral Blood Study Flow 1](PBSStudyWorkflow1.png)
 
 
-### 1. Get an ID
-Get a new PBS ID. This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
+### 1. Create a New Study
+Create a study and store the Study-ID (aka PBS-ID). This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
+You need to store and keep track of this ID.
 
 #### HTTP Request
-Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find and retrieve PBSs easier.
+Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers, Device Identifiers, Organization IDs or any number of other information that is important to you along side the PBS. These tags can later be used to find and retrieve PBSs easier.
+
+Please do NOT store Personally Identifiable Information (PII) in these fields.
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"tags":{"patient_proxy_id":""}}' | http -f POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"tags":{"patient_proxy_id":"PPID12345"}}' | http -f POST https://api.in.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs
 ```
 > Make sure to replace `HEMATO_AI_AUTH_TOKEN` with your API key.
 
@@ -299,17 +296,20 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai
 {
   "status": 201,
   "results":{
-    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd"
+    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd",
+    "tags": {
+      "patient_proxy_id": "PPID12345"
+    }
   }
 }
 ```
 <aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
 
 ### 2. Upload the files
-Upload the sample by calling the PBS upload API as many times as needed.
+Upload the images by calling the PBS upload API as many times as needed.
 
 #### HTTP Request
-Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_id` in the response structure returned).
+Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_study_id` in the response structure returned).
 
 To determin the file type, this endpoint expects either "file_name" or "content_type" query parameters. For example for a JPEG file you can use `file_name=some_file_name.jpg` or `content_type=image/jpeg`.
 
@@ -319,27 +319,45 @@ To determin the file type, this endpoint expects either "file_name" or "content_
 This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
 Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.
 
-The file type is determined by the `Content-Type` header of your request. So when sending a request to upload a jpg file for example, your request needs to have a header `Content-Type:image/jpeg`.
-This endpoint accepts:
+The file type is determined by the file extension of the provided "file_name" query parameter or the "content_type" provided as a query parameter. So when sending a request to upload a jpg file for example, it is enough to have a file_name in your url ending in .jpg or .jpeg for example  https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg
 
-File Type | Request Content-Type Header
---------- | -----------
-jpeg , jpg | image/jpeg
-png | image/png
-zip ★ | application/zip
 
-★ Zip files can contain jpg or png files.
-
-If the Content-Type header is missing, the file name extension for "file_name" provided is used to determine the file type.
 If no file type can be determined or provided, a 400 - Bad Request error is returned.
 
 
 ```shell
 # use httpie from https://httpie.io/
-http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files Authorization:HEMATO_AI_AUTH_TOKEN Content-Type:image/jpeg  < /path/to/filename.jpg
+http -f POST https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg  Authorization:HEMATO_AI_AUTH_TOKEN  < /local/path/to/MS12_12.jpg
 # alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Type:image/jpeg" --data-binary "@/path/to/filename.jpg"  https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/local/path/to/MS12_12.jpg"  https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
 ```
+
+```Python
+```
+
+```Go
+
+  imageBytes, err := os.ReadFile(fmt.Sprintf("%s/%s", filePath, fileName))
+  if err != nil {
+		return ...
+	}
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", "https://api/in/hemato.ai/pbs/YOUR_NEW_PBS_ID", bytes.NewReader(imageBytes))
+	if err != nil {
+		return ...
+	}
+	q := req.URL.Query()
+	q.Add("file_name", fileName)
+	req.URL.RawQuery = q.Encode()
+
+  err = client.Do(q)
+  if err != nil {
+		return ...
+	}
+  ...
+
+```
+
 
 > The above command returns a JSON structure like this:
 
@@ -358,13 +376,13 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --header "Content-Typ
 
 <aside class="warning">Notes:<ul>
 <li>Please note that this is NOT an HTTP multipart call with `Content-Type: multipart/form-data` </li>
-<li>Plaese note that this is not a form submission call either. The entire body of the request is the image.
+<li>Plaese note that this is not a form submission call. The entire body of the request is the image.
 </ul>
 </aside>
 
 
-### 3. Request a Diagnostic Study
-When all the files for a particular PBS is uploaded, you will make a call to mark the PBS as ready to be processed and ask for any number of diagnostics tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
+### 3. Request a Detection Task
+When all the files for a particular PBS is uploaded, you can make a call to mark the PBS as ready to be processed and ask for one or more Detection Tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
 
 Optionally you can register a `callback_url` that will be called when the report is ready.
 We’ll send a POST request to the callback URL with details of the report when ready.
@@ -381,9 +399,9 @@ This enables early filtration of incoming traffic, particularly in cases where t
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | http -f POST https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | http -f POST https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 ```
 
 > The above command returns a JSON structure like this:
@@ -411,9 +429,9 @@ You can check the status of the task by making a GET call to /status
 
 ```shell
 #
-http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
+http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
 #
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
 ```
 
 > This returns
@@ -440,9 +458,9 @@ In cases that there are multiple revisions and you want to get an earlier versio
 
 ```shell
 #
-http https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report Authorization:HEMATO_AI_AUTH_TOKEN
+http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report Authorization:HEMATO_AI_AUTH_TOKEN
 #
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report
 ```
 
 > Which in turn returns a JSON structure like:
@@ -498,112 +516,11 @@ There are 3 levels of report available.
 2. Diagnostic Information
 3. Pathology Report
 
-## Workflow 2
-
-In workflow 2, to get Hemato.AI's opinion on a Peripheral Blood Smear you follow these steps:
-
-1. Submit a url from which Hemato.AI can download the files and get an Study ID back (you can use this ID to check the status of the study and get the report)
-2. Optionally provide a callback url
-3. Wait for it
-4. Get a callback, with information about the sample, dwnloaded file size and formats and sanity checks.
-5. Wait for it
-6. Get a callback, with information about the report, and a link to the report
-7. Check the status of the study and get the report
-
-![Peripheral Blood Study Flow 2](PeripheralBloodWorkflows.png)
-
-
-### 1,2,3. Submit a url from which Hemato.AI can download the files and get an Study ID back
-
-You can make a POST call to `/pbs` with a url to retrieve a list of files from. this call will return a Study ID that you can use to check the status of the study and get the report.
-The call needs to include a list of diagnstic tasks that you want to be performed on the files.
-The list of files returned by the provided list_url can be a list of presigned urls to files in an S3 bucket, or a list of urls to files in a publically accessible location, or in some other way need to be accessible to Hemato.AI.
-
-The body of this POST request will look like the example on the right:
-> Request body to start "Workflow 2"
-
-```json
-{
-  "list_url": "https://example.com/samples/1/files.json",
-  "tasks": [
-    "pbs_v1"
-  ]
-}
-```
-
-On the right you can see an example of the list of files that will be downloaded by Hemato.AI as a single periheral blood study.
-
-```json
-{
-  "peripheral_blood_sample_id": "62dd0300-880e-4069-bea8-66c9ca73c207",
-  "patient_proxy_medical_record_number": "123456789",
-  "sample_collection_timestamp": "2021-01-02T15:0405+07:00", // RFC3339 formated date time
-  "clinical_tasks_requested": [
-    "pbs_v1"
-  ],
-  "files": [
-    "https://presignedurldemo.s3.eu-west-2.amazonaws.com/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJJWZ7B6WCRGMKFGQ%2F20180210%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180210T171315Z&X-Amz-Expires=1800&X-Amz-Signature=12b74b0788aa036bc7c3d03b3f20c61f1f91cc9ad8873e3314255dc479a25351&X-Amz-SignedHeaders=host",
-    ...
-  ],
-  "callback_url": "https://example.com/callbacks/1"
-}
-```
-
-
-
-> To submit a url to a Peripheral Blood Smear Study
-
-```shell
-echo '{"peripheral_blood_sample_id":"xyz", "patient_proxy_medical_record_number":"abc", ... }' | http -F POST https://dev.api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
-```
-
-```json
-{
-  "results": {
-    "pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
-    "file_ids": ["sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"]
-  },
-}
-```
-
-### 4,5 Receive a callback with information about the sample, downloaded file size and formats and sanity checks.
-
-When the study has been downloaded and the files have been checked for sanity, you will receive a callback to the callback_url you provided in the previous step.
-
-The example on the right shows the body of a callback request.
-
-```json
-{
-
-}
-```
-
-
-### 6 Receive a callback with information about the report, and a link to the report
-
-When the study has been analysed and the report is ready, you will receive a callback to the callback_url you provided in the previous step.
-
-The example on the right shows the body of a callback request.
-
-```json
-{
-
-}
-```
-
-### 7 Check the status of the study and get the report
-
-You can make a GET call to `/pbs/{pbs_study_id}/status` to get the status of the study and the report.
-
-To retrive the reports you can make a call to `/pbs/{pbs_study_id}/report`.
-for more information see the same call in "workflow 1" above (step: get the report for peripheral blood study).
-
-
 # Health Check
 If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.
 
 ```shell
-http https://api.hemato.ai/heartbeat
+http https://api.in.hemato.ai/heartbeat
 ```
 
 ```json
