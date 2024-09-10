@@ -180,7 +180,7 @@ If you are using Public-Private Key Auth, you will be generating and signing you
 Hemato.AI authorization headers are JSON Web Tokens (JWT) (more info at (https://jwt.io/)[https://jwt.io/]).
 
 ### Suppoted Signing Algorithms
-Curently only `RS256` (RSASSA-PKCS-v1.5 using SHA-256) is allowed.
+Curently only `RSA384` (RSASSA-PKCS-v1.5 using SHA-384) and  `RS256` (RSASSA-PKCS-v1.5 using SHA-256) is allowed.
 
 ### Required Fields
 
@@ -195,11 +195,12 @@ Issuer    | `iss`       | String                | This is the identifier of your
 Issed at  | `iat`       | Unix Time aka IntDate | The time the token was issues. A token issued in future is invalid. A token more than 1 hour is considered expired.
 Expiraion | `exp`       | Unix Time aka IntDate | The time this token will expire and be invalid.  A token more than 1 hour is considered expired, regardless of this value.
 Audience  | `aud`       | String                | This needs to match the domain and region you are calling. Examples are: `us.api.hemato.ai` or `dev.api.hemato.ai`
-----------|-------------|-----------------------|----------------------------------
-User ID   | `uid`       | String                | This needs to be one of the user ids from the same organization where the signing key belongs to and this use must have permission to access to region.
-----------|-------------|-----------------------|----------------------------------
+          |             |                       |
+User ID   | `sub`       | String                | This needs to be one of the user ids from the same organization where the signing key belongs to and this use must have permission to access this region.
+Role      | `role`      | String                | This is the role of the user. Available roles are `admin`, `user`, `device`, `service`. This is used to determine the permissions of the bearer.
+          |             |                       |
 Key ID *  | `kid`       | String                | Only required if using `RS256` signing algorithm. This is the ID of the public key that was used to sign the token.
-----------|-------------|-----------------------|----------------------------------
+          |             |                       |
 
 
 
@@ -234,8 +235,8 @@ On the right you can see an example of a Hemato.AI JWT
   "iat": 1682945428,
   "iss": "1stdevision.example.com",
   "jti": "2d33d1d518",
-  "sub": "1st_devision_api_user",
-  "uid": "01234567-789d-46b7-b38c-45d4562f5c12",
+  "sub": "01234567-789d-46b7-b38c-45d4562f5c12",
+  "role": "user",
   "kid": "01234567-789d-46b7-b38c-45d4562f5c12"
 }
 ```
@@ -283,12 +284,10 @@ Get a new PBS ID. This ID will be used to upload the images, request diagnostic 
 
 #### HTTP Request
 Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers or Organization IDs or any number of other information that is important to you with the PBS. These tags can later be used to find and retrieve PBSs easier.
-<aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
-
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"tags":{"patient_proxy_id":"}}' | http -f POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"tags":{"patient_proxy_id":""}}' | http -f POST https://api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
 curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/pbs
 ```
@@ -304,6 +303,7 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai
   }
 }
 ```
+<aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
 
 ### 2. Upload the files
 Upload the sample by calling the PBS upload API as many times as needed.
@@ -311,7 +311,10 @@ Upload the sample by calling the PBS upload API as many times as needed.
 #### HTTP Request
 Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_id` in the response structure returned).
 
-This api accepts an optional "file_name" and stors this along side the file. This can be later used for audit purposes.
+To determin the file type, this endpoint expects either "file_name" or "content_type" query parameters. For example for a JPEG file you can use `file_name=some_file_name.jpg` or `content_type=image/jpeg`.
+
+
+```shell
 
 This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
 Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.

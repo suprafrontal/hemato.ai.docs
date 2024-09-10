@@ -20,5 +20,14 @@ echo success
 echo -------------------
 
 echo DEPLOYING
-gcloud beta run deploy docs-hemato-ai --labels service=docs-hemato-ai,version="${VERSION}",commit=${COMMIT} --region us-east1 --timeout=1m --cpu 2 --memory 2Gi --image gcr.io/stimulator/docs.hemato.ai --platform managed
+gcloud beta run deploy docs-hemato-ai \
+  --labels service=docs-hemato-ai,version="${VERSION}",commit=${COMMIT} \
+  --region us-east1 \
+  --timeout=1m \
+  --use-http2 \
+  --cpu 2 \
+  --memory 2Gi \
+  --image gcr.io/stimulator/docs.hemato.ai \
+  --platform managed
+
 rm -rf static
