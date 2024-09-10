@@ -384,6 +384,14 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/loca
 ### 3. Request a Detection Task
 When all the files for a particular PBS is uploaded, you can make a call to mark the PBS as ready to be processed and ask for one or more Detection Tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
 
+At this time, for this deployment, these Detection Tasks are available:
+
+
+| Task                        | Type      | Identifier        | Notes |
+|-----------------------------|-----------|-------------------|--------------|
+| Detect Any Signs of Malaria | Detection | `MALARIA_ANY_ANY` | Reports any sign of malaria parasites, including All species, Active infections, Infections under treatment |
+
+
 Optionally you can register a `callback_url` that will be called when the report is ready.
 We’ll send a POST request to the callback URL with details of the report when ready.
 The callback url needs to accept a POST call, and must support HTTPS with a valid server certificate. The body of the call will conform to `{"pbs_stody_id":"25f7de38-ba9c-4b45-a4d8-8c13461d7b39", "report_status": "ready", "progress": 1.0}` but it can be ignored.
@@ -391,7 +399,7 @@ So there are two approaches that users can take:
 1. Include the `pbs_study_id` or any other information you need (no PII or PHI) in the url to be called.
 2. Use a single generic url, but parse and use the information in the body to identify which study is the subject of the call back.
 
-Although it is not strictly needed, we recommend you include a cryptographic signature as part of your URL, to that you can verify the authenticity of the cells to your endpoint. Example:
+Although it is not strictly needed, we recommend you include a cryptographic signature as part of your URL, so that you can verify the authenticity of the calls to your endpoint. Example:
 `{"callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/<timestamped_cryptographic_signature_valid_only_for_this_PBS_STUDY_ID>"`
 
 This enables early filtration of incoming traffic, particularly in cases where the backend systems may be inundated by a surge of malicious or rogue requests.
@@ -411,7 +419,7 @@ echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_re
   "results":{
     "pbs_study_id":"48ae6352-d15d-440a-83f3-05a1f68aa11b",
     "tasks": [
-      "pbs_v1"
+      "TASK_1_IDENTIFIER"
     ]
   }
 }
@@ -449,8 +457,8 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/
 ```
 
 
-### 5. Get The Report for a Peripheral Blood Smear Study
-You can get the latest version of the report by making a GET call.
+### 5. Get The Report for a Detection Task
+You can get the latest version of the reports by making a GET call.
 In cases that there are multiple revisions and you want to get an earlier version of the report you need to specify the version.
 
 
@@ -458,9 +466,9 @@ In cases that there are multiple revisions and you want to get an earlier versio
 
 ```shell
 #
-http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report Authorization:HEMATO_AI_AUTH_TOKEN
+http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY Authorization:HEMATO_AI_AUTH_TOKEN
 #
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY
 ```
 
 > Which in turn returns a JSON structure like:
@@ -470,51 +478,16 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/
 	"status": 200,
 	"results": {
 		"pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
-		"file_ids": ["sha224-i-db367ccd89fc39aa6ff9fff0cd9b11e6b5b6a41cff4bbb232bee7c93"],
-		"feature_statistics": {
-			"rbc-density": {
-				"value": "x",
-				"unit": "y"
-			},
-			"platelet-density": {
-				"value": "x",
-				"unit": "y"
-			},
-			"blast-density": {
-				"value": "x",
-				"unit": "y"
-			}
-		},
-		"morphological_findings": {
-			"ring trophozoite": {
-				"count": "1",
-				"heat_map": [{
-					"center": [435, 345],
-					"radius": 35
-				}]
-			}
-		},
-		"diagnostic_report": {
-			"differential_diagnosis": [{
-				"score": 7,
-				"confidence": "0.95",
-				"clinical-significance": "D",
-				"icd10-code": "B50",
-				"english-long": "Malaria Infection with Plasmodium Falciparum",
-				"english-short": "Malaria"
-			}]
-		},
-		"pathology_report": "No demographics or past medical history is available about the patient. Inspection of peripheral blood slide revealed ring trophozoites ..."
+    "report": {
+      "MALARIA_ANY_ANY": {
+        "positive_count": 12,
+        "negative_count": 3
+      }
+    }
 	},
 	"debug_info": {}
 }
 ```
-
-There are 3 levels of report available.
-
-1. Morphological Findings
-2. Diagnostic Information
-3. Pathology Report
 
 # Health Check
 If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.
