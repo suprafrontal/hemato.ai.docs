@@ -249,7 +249,7 @@ You can also make a call to `/auth/hello` endpoint and get more helpful informat
 
 ```shell
 # if you are using httpie
-http -f POST https://dev.api.hemato.ai/auth/helo Authorization:HEMATO_AI_AUTH_TOKEN
+http -f POST https://dev.api.hemato.ai/auth/hello Authorization:HEMATO_AI_AUTH_TOKEN
 # if you are using curl
 curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.hemato.ai/auth/hello
 ```
