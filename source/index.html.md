@@ -136,9 +136,9 @@ This call does NOT accept the raw user password. Instead you need to provide the
 # otherwise your plan password will remain in your shell history and possibly leak into backups and such.
 export PASS_SHA_256=`echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1`
 # use httpie from https://httpie.io/
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://api.in.hemato.ai/auth/login
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://in.api.hemato.ai/auth/login
 # or use curl, you can just pass the correct header with each request
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://api.in.hemato.ai/auth/login"
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://in.api.hemato.ai/auth/login"
 ```
 
 ```go
@@ -251,7 +251,7 @@ You can also make a call to `/auth/hello` endpoint and get more helpful informat
 # if you are using httpie
 http -f POST https://dev.api.hemato.ai/auth/hello Authorization:HEMATO_AI_AUTH_TOKEN
 # if you are using curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/auth/hello
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/auth/hello
 ```
 
 
@@ -284,9 +284,9 @@ Please do NOT store Personally Identifiable Information (PII) in these fields.
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"tags":{"patient_proxy_id":"PPID12345"}}' | http -f POST https://api.in.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"tags":{"patient_proxy_id":"PPID12345"}}' | http -f POST https://in.api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs
 ```
 > Make sure to replace `HEMATO_AI_AUTH_TOKEN` with your API key.
 
@@ -319,7 +319,7 @@ To determin the file type, this endpoint expects either "file_name" or "content_
 This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
 Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.
 
-The file type is determined by the file extension of the provided "file_name" query parameter or the "content_type" provided as a query parameter. So when sending a request to upload a jpg file for example, it is enough to have a file_name in your url ending in .jpg or .jpeg for example  https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg
+The file type is determined by the file extension of the provided "file_name" query parameter or the "content_type" provided as a query parameter. So when sending a request to upload a jpg file for example, it is enough to have a file_name in your url ending in .jpg or .jpeg for example  https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg
 
 
 If no file type can be determined or provided, a 400 - Bad Request error is returned.
@@ -327,9 +327,9 @@ If no file type can be determined or provided, a 400 - Bad Request error is retu
 
 ```shell
 # use httpie from https://httpie.io/
-http -f POST https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg  Authorization:HEMATO_AI_AUTH_TOKEN  < /local/path/to/MS12_12.jpg
+http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg  Authorization:HEMATO_AI_AUTH_TOKEN  < /local/path/to/MS12_12.jpg
 # alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/local/path/to/MS12_12.jpg"  https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/local/path/to/MS12_12.jpg"  https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
 ```
 
 ```Python
@@ -342,7 +342,7 @@ curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/loca
 		return ...
 	}
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", "https://api/in/hemato.ai/pbs/YOUR_NEW_PBS_ID", bytes.NewReader(imageBytes))
+	req, err := http.NewRequest("POST", "https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID", bytes.NewReader(imageBytes))
 	if err != nil {
 		return ...
 	}
@@ -407,9 +407,9 @@ This enables early filtration of incoming traffic, particularly in cases where t
 
 ```shell
 # use httpie from https://httpie.io/
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | http -f POST https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
+echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
 # alternatively use curl
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
 ```
 
 > The above command returns a JSON structure like this:
@@ -437,9 +437,9 @@ You can check the status of the task by making a GET call to /status
 
 ```shell
 #
-http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
+http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
 #
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
 ```
 
 > This returns
@@ -466,9 +466,9 @@ In cases that there are multiple revisions and you want to get an earlier versio
 
 ```shell
 #
-http https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY Authorization:HEMATO_AI_AUTH_TOKEN
+http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY Authorization:HEMATO_AI_AUTH_TOKEN
 #
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY
+curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY
 ```
 
 > Which in turn returns a JSON structure like:
@@ -493,7 +493,7 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://api.in.hemato.ai/pbs/
 If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.
 
 ```shell
-http https://api.in.hemato.ai/heartbeat
+http https://in.api.hemato.ai/heartbeat
 ```
 
 ```json
