@@ -25,7 +25,6 @@ gcloud beta run deploy in-docs-hemato-ai \
   --labels service=docs-hemato-ai,version="${VERSION}",commit=${COMMIT} \
   --region us-east1 \
   --timeout=1m \
-  --use-http2 \
   --cpu 2 \
   --memory 2Gi \
   --image gcr.io/stimulator/in.docs.hemato.ai \
