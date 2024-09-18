@@ -70,8 +70,8 @@ $phone-width: $tablet-width - $nav-width !default; // min width before reverting
 // FONTS
 ////////////////////
 %default-font {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 14px;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei","微软雅黑", STXihei, "华文细黑", sans-serif;
+  font-size: 13px;
 }
 
 %header-font {
@@ -81,7 +81,7 @@ $phone-width: $tablet-width - $nav-width !default; // min width before reverting
 
 %code-font {
   font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -98,6 +98,10 @@ $search-box-border-color: #666 !default;
 // These settings are probably best left alone.
 
 %break-words {
-    word-break: break-all;
-    hyphens: auto;
+  word-break: break-all;
+
+  /* Non standard for webkit */
+  word-break: break-word;
+
+  hyphens: auto;
 }
