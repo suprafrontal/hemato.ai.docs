@@ -1,3 +1,26 @@
+# ALI
+
+- install `rbenv`
+- `rbenv local 3.3.5`
+- rbenv init (or source ~/.zprofile )
+- `gem update --system`
+- `gem install bundler`
+- `bundle install`
+
+preview locally
+- `bundle exec middleman server`
+
+build
+- `bundle exec middleman build`
+
+
+then deploy
+- `misc/deploy.sh`
+
+
+
+
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/slatedocs/img/main/logo-slate.png" alt="Slate: API Documentation Generator" width="226">
   <br>
