@@ -35,39 +35,13 @@ Getting started with Slate is super easy! Simply press the green "use this templ
 Getting Started with Slate
 ------------------------------
 
-### Prerequisites
+To get started with Slate, please check out the [Getting Started](https://github.com/slatedocs/slate/wiki#getting-started)
+section in our [wiki](https://github.com/slatedocs/slate/wiki).
 
-You're going to need:
-
- - **Linux or macOS** — Windows may work, but is unsupported.
- - **Ruby, version 2.3.1 or newer**
- - **Bundler** — If Ruby is already installed, but the `bundle` command doesn't work, just run `gem install bundler` in a terminal.
-
-### Getting Set Up
-
- 1. Fork this repository on Github.
- 2. Clone *your forked repository* (not our original one) to your hard drive with `git clone https://github.com/YOURUSERNAME/slate.git`
- 3. `cd slate`
- 4. Install all dependencies: `bundle install`
- 5. Start the test server: `bundle exec middleman server`
-
-Or use the included Dockerfile! (must install Docker first)
-
-```shell
-docker build -t slate .
-docker run -d -p 4567:4567 slate
-```
-
-You can now see the docs at <http://localhost:4567>. Whoa! That was fast!
-
-*Note: if you're using the Docker setup on OSX, the docs will be
-available at the output of `docker-machine ip <machine-name>` (port: 4567) instead of `localhost:4567`.*
-
-Now that Slate is all set up your machine, you'll probably want to learn more about [editing Slate markdown](https://github.com/tripit/slate/wiki/Markdown-Syntax), or [how to publish your docs](https://github.com/tripit/slate/wiki/Deploying-Slate).
-
-### Note on JavaScript Runtime
-
-For those who don't have JavaScript runtime or are experiencing JavaScript runtime issues with ExecJS, it is recommended to add the [rubyracer gem](https://github.com/cowboyd/therubyracer) to your gemfile and run `bundle` again.
+We support running Slate in three different ways:
+* [Natively](https://github.com/slatedocs/slate/wiki/Using-Slate-Natively)
+* [Using Vagrant](https://github.com/slatedocs/slate/wiki/Using-Slate-in-Vagrant)
+* [Using Docker](https://github.com/slatedocs/slate/wiki/Using-Slate-in-Docker)
 
 Companies Using Slate
 ---------------------------------
@@ -84,7 +58,7 @@ Companies Using Slate
 * [Parrot Drones](http://developer.parrot.com/docs/bebop/)
 * [CoinAPI](https://docs.coinapi.io/)
 
-(Feel free to add your site to this list in a pull request!)
+You can view more in [the list on the wiki](https://github.com/slatedocs/slate/wiki/Slate-in-the-Wild).
 
 Questions? Need Help? Found a bug?
 --------------------
@@ -106,11 +80,3 @@ Thanks to the following people who have submitted major pull requests:
 - [@cvkef](https://github.com/cvkef)
 
 Also, thanks to [Sauce Labs](http://saucelabs.com) for sponsoring the development of the responsive styles.
-
-Special Thanks
---------------------
-- [Middleman](https://github.com/middleman/middleman)
-- [jquery.tocify.js](https://github.com/gfranko/jquery.tocify.js)
-- [middleman-syntax](https://github.com/middleman/middleman-syntax)
-- [middleman-gh-pages](https://github.com/neo/middleman-gh-pages)
-- [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
