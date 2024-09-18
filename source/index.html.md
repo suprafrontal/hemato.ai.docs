@@ -10,7 +10,6 @@ language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of
 toc_footers:
   - <a href='https://hemato.ai'>Hemato.AI</a>
   - <a href='mailto:ai@hemato.ai'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
@@ -24,72 +23,151 @@ meta:
     content: Documentation for Hemato.AI Diagnostic API
 ---
 
-# Introduction
+# Introduction to Hemato.AI Diagnostic API
 
-Welcome to the Hemato.AI Diagnostic API! You can use our API to access Hemato.AI's Diagnostic AI and Clinical Algorithms, which processes images of peripheral blood slides and generates hematopathology reports.
+Welcome to the Hemato.AI Diagnostic API documentation. This powerful interface allows you to leverage Hemato.AI's state-of-the-art Diagnostic AI and Clinical Algorithms for advanced hematopathology analysis.
 
-Examples on this page are in shell script and language bindings in Go, Typescript, Python, C#, and TypeScript coming in future! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+## Key Features
+
+- Process high-resolution images of peripheral blood slides
+- Access cutting-edge AI-driven diagnostic tools
+- Generate comprehensive hematopathology reports
+
+## Documentation Structure
+
+Throughout this documentation, you'll find code examples demonstrating API usage in multiple programming languages:
+
+- Shell script
+- Go
+- TypeScript
+- Python
+
+To enhance readability, code examples are displayed in the dark panel on the right side of the page. You can easily switch between programming languages using the tabs located in the top-right corner of the code panel.
+
+We've designed this documentation to provide you with a clear understanding of our API's capabilities and guide you through its implementation. Whether you're a seasoned developer or new to our platform, you'll find the information you need to successfully integrate Hemato.AI's diagnostic power into your applications.
+
 
 # Endpoints
-Hemato.AI API is made available at specific regional endpoints to adhere to regional regulations. Any data submitted to a regional endpoint will be handled on servers located within the same geographical and regulatory region.
 
-All Hemato.AI API endpoints are only available through encrypted (TLS) connections.
+Hemato.AI API provides access through region-specific endpoints to ensure compliance with local regulations. All data submitted to a regional endpoint are processed on infrastructure dedicated to that geographical or regulatory region.
 
-There are a few special purpose endpoints that are not region specific:
-- For development and testing purposes anyone can use the Dev endpoint. To use this endpint you need to be assigned developer credentials. This endpoint is not HIPAA compliant and should not be used for any production purposes. Information submited to this service is not protected by any privacy laws and may be inspected by Hemato.AI staff.
-- For external quality assurance and external automated testing you can use the QA endpoint. Specially it is imporant to run automated benchmarks agains this endpoint before any significant change to your hardware or sofrwre that has the potential to affect the quality, or clinical validity of the outputs. To use this endpoint you need QA credentials. This endpoint is not HIPAA compliant and should not be used for any production purposes. Information submited to this service is not protected by any privacy laws and may be inspected by Hemato.AI staff.
+## Security
 
+All Hemato.AI API endpoints are accessible exclusively through encrypted (TLS) connections, ensuring the highest level of data protection during transmission.
 
-You can explicitly choose what region to use from this list:
+## Special Purpose Endpoints
 
-Region | Endpoint                  | Users
--------|---------------------------|----------------------------------------
-DEV    | https://dev.api.hemato.ai | for development and testing purposes
-QA     | https://qa.api.hemato.ai  | for external quality assurance and external automated testing
-USA    | https://us.api.hemato.ai  | Production, for customers in the United States
-Canada | https://ca.api.hemato.ai  | Production, for customers in Canada
-EU     | https://eu.api.hemato.ai  | Production, for customers in the European Union
+In addition to regional production endpoints, Hemato.AI offers special-purpose endpoints for specific use cases:
+
+### Development Endpoint (DEV)
+- **URL**: https://dev.api.hemato.ai
+- **Purpose**: Internal development and testing
+- **Access**: Requires developer credentials
+- **Important Notes**:
+  - Not HIPAA compliant
+  - Not suitable for production use
+  - Submitted information may be inspected by Hemato.AI staff
+  - No privacy law protections apply
+
+### Quality Assurance Endpoint (QA)
+- **URL**: https://qa.api.hemato.ai
+- **Purpose**: External quality assurance and automated testing
+- **Access**: Requires QA credentials
+- **Use Case**: Run automated benchmarks before significant hardware or software changes that may affect output quality or clinical validity
+- **Important Notes**:
+  - Not HIPAA compliant
+  - Not suitable for production use
+  - Submitted information may be inspected by Hemato.AI staff
+  - No privacy law protections apply
+
+## Regional Endpoints
+
+Choose the appropriate regional endpoint based on your location and regulatory requirements:
+
+| Region | Endpoint | Users |
+|--------|----------|-------|
+| USA | https://us.api.hemato.ai | Production use for customers in the United States |
+| Canada | https://ca.api.hemato.ai | Production use for customers in Canada |
+| EU | https://eu.api.hemato.ai | Production use for customers in the European Union |
+| India | https://in.api.hemato.ai | DEMO MODE |
+
+Please ensure you select the correct endpoint for your region to maintain compliance with local regulations and data protection laws.
 
 # HTTP Responses
 
-Most Hemato.AI API will return a JSON encoded response in this format.
+The Hemato.AI API typically returns responses in JSON format. The standard response structure is as follows:
 
 ```json
 {
   "status": 202,
-  "results": {
-
-  },
-  "error": "error message if any",
+  "results": {},
+  "error": "Error message, if applicable",
   "user_message": "",
   "debug_info": {
-    // helpful information for debugging, except for auth debugging, see Auth section below
+    // Helpful information for debugging
   }
 }
 ```
 
+## Response Fields
 
-Field  | Description
--------|------------
-status | This reflects the [HTTP Status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) of the response.
-error | If something has gone wrong, this provides an error message with error codes or more context on what has happened.
-results | This is the output of the call, and can be of any type, often a dictionary / object.
-user_message | This is a message that can be displayed to the end users. This is often useful in cases where there is an error.
-debug_info | Contains helpful information for debugging
+| Field | Description |
+|-------|-------------|
+| `status` | An integer representing the [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) of the response. |
+| `results` | The main output of the API call. This field can contain various data types, often a JSON object. |
+| `error` | A string providing error details, including error codes or context, when applicable. |
+| `user_message` | A human-readable message suitable for display to end users, particularly useful in error scenarios. |
+| `debug_info` | An object containing additional information to assist with troubleshooting. Note: Authentication debugging information is handled separately (see Auth section). |
+
+## Status Codes
+
+The `status` field in the response corresponds to standard HTTP status codes. Common codes you may encounter include:
+
+- 200: OK - The request was successful
+- 201: Created - A new resource was successfully created
+- 202: Accepted - The request has been accepted for processing
+- 400: Bad Request - The request was invalid or cannot be processed as is
+- 401: Unauthorized - Authentication is required and has failed or has not been provided
+- 403: Forbidden - The server understood the request but refuses to authorize it
+- 404: Not Found - The requested resource could not be found
+- 500: Internal Server Error - The server encountered an unexpected condition
 
 
+## Error Handling
+
+When an error occurs, the `error` field will contain a descriptive message to help diagnose the issue. The `user_message` field may provide a more user-friendly explanation of the error, which can be directly displayed in your application's user interface.
+
+## Debugging
+
+The `debug_info` object contains additional technical details that can be valuable for troubleshooting issues with your API integration. This information is primarily intended for developers and should not be displayed to end users.
+
+Note: For security reasons, authentication-related debugging information is handled separately. Please refer to the Auth section of this documentation for details on debugging authentication issues.
 
 
 # Authentication
 
-All authenticated calls to Hemato.AI API are expected to present an `Authorization` header containing a signed and valid token.
-To obtain an authorization token you have 2 options:
+All authenticated calls to the Hemato.AI API require an `Authorization` header containing a signed and valid token. There are two authentication methods available:
 
-1. **Session Based Authentication:** you can call the `/auth/login` endpoint for a specific region and provide a user-name and password-hash (sha256 of the actual password) to obtain a newly minted and signed token. Session Auth is best suited for interactive applications where a user is directly involved in the process of obtaining the token. Example use cases are web applications, mobile apps, and desktop applications where individual users have Hemato.AI accounts. If you have a user facing application but your users don't hold individual Hemato.AI credentials, you can use the Public-Private Key authentication method below.
-2. **Public-Private Key:** you can create your own Public-Private key paris, and register your public keys with Hemato.AI. Then you can sign your own tokens using the private key associate with the public keys you registered with Hemato.AI. This is particularly helpful in situations where a user is not directly involved and a device or an automated system needs to make calls to Hemato.AI API. Examples a hardware device digitizes samples and needs to call Hemato.AI to obtain an interpretation of the sample. Or you have a mobile app and allows the users to interact with Hemato.AI but the users don't hold individual Hemato.AI accounts. To learn more read [How to register your public keys with hemato](#Register-Public-Key)
+1. **Session-Based Authentication**
+2. **Public-Private Key Authentication**
 
+## Session-Based Authentication
 
-## Session Auth
+This method is ideal for interactive applications where users have individual Hemato.AI accounts. Examples include web applications, mobile apps, and desktop applications.
+
+### Obtaining a Token
+
+To obtain an authorization token:
+
+1. Call the `/auth/login` endpoint for a specific region.
+2. Provide a username and password hash (SHA-256 of the actual password).
+
+> Note: Never send raw passwords. Always use the SHA-256 hash for security.
+
+### Generating Password Hash
+
+Here are code examples showing how to generate the password hash (sha256) that you will need to send along a user name to the auth endpoint.
+
 
 ```shell
 # SECURITY RISK:
@@ -120,91 +198,87 @@ const passSha = CtryptoJS.SHA256('YOUR_ACTUAL_PASSWORD').toString(CryptoJS.enc.H
 console.log(passSha)
 ```
 
-For interactive use cases, where you or your users hold individual Hemato.AI accounts, you can use the Session Auth method. This method is best suited for web applications, mobile apps, and desktop applications where individual users have Hemato.AI accounts.
+### Login Request Example
 
-This call does NOT accept the raw user password. Instead you need to provide the sha256 hash of the password. This is to prevent the password from being leaked in internet trafic capture or intercepted on device or in transit. Of course all Hemato.AI endpoints are only available only through encrypted (TLS) connections. Still there are scenarios that a client browser or tools might allow for interception of traffic. You can use the following command to generate the sha256 hash of your password:
-
-
-
-> To authorize, using Session Authentication:
-
+Here are examples codes that uses the password hash from above to login for an interactive session.
 
 ```shell
-# SECURITY RISK:
-# Please ONLY use this for debugging login problems.
-# MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
-# otherwise your plan password will remain in your shell history and possibly leak into backups and such.
 export PASS_SHA_256=`echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1`
-# use httpie from https://httpie.io/
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | http -F POST https://in.api.hemato.ai/auth/login
-# or use curl, you can just pass the correct header with each request
-echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | curl -X POST "https://in.api.hemato.ai/auth/login"
+echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | \
+http -F POST https://in.api.hemato.ai/auth/login
 ```
 
 ```go
 // Not implemented yet
 ```
 
-> The above command returns a JSON structure like this:
+```typescript
+// Not implemented yet
+```
+
+
+### Sample Response
 
 ```json
 {
   "status": 202,
-    "results": {
-        "login_timestamp": "1682945428455621477",
-        "token": {
-            "HY_APP_AUTH_v1": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9E....."
-        },
-        "user": {
-            "email": "ali@example.com",
-            "id": "03349841-588d-56b3-b93c-52d0983f9c75",
-            "screen_name": "Ali",
-            "user_name": "ali@example.com"
-        }
+  "results": {
+    "login_timestamp": "1682945428455621477",
+    "token": {
+      "HY_APP_AUTH_v1": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9E....."
     },
-    "debug_info": {
-        "delta": "463.021938ms",
-        "version": "bb_api.362.pbs_tasks.dfd119b"
+    "user": {
+      "email": "ali@example.com",
+      "id": "03349841-588d-56b3-b93c-52d0983f9c75",
+      "screen_name": "Ali",
+      "user_name": "ali@example.com"
     }
+  },
+  "debug_info": {
+    "delta": "463.021938ms",
+    "version": "bb_api.362.pbs_tasks.dfd119b"
+  }
 }
 ```
 
-## Public / Private Key Auth
+## Public-Private Key Authentication
 
-You can sign your own Authentications headers, see [JWT specifications](#JWT-Specifications).
+This method is suitable for automated systems or devices that need to make API calls without user interaction. It's also useful for applications where users don't have individual Hemato.AI accounts.
 
-A self-service dashboard to register your public keys is coming soon. In the meantime, please contact us to register your public keys.
+### Key Registration
 
-## JWT Specifications
-If you are using Public-Private Key Auth, you will be generating and signing your own Authorizaiton headers.
-Hemato.AI authorization headers are JSON Web Tokens (JWT) (more info at (https://jwt.io/)[https://jwt.io/]).
+A self-service dashboard for registering public keys is coming soon. In the meantime, please contact Hemato.AI support to register your public keys.
 
-### Suppoted Signing Algorithms
-Curently only `RSA384` (RSASSA-PKCS-v1.5 using SHA-384) and  `RS256` (RSASSA-PKCS-v1.5 using SHA-256) is allowed.
+### JWT Specifications
 
-### Required Fields
+Hemato.AI uses JSON Web Tokens (JWT) for authorization headers. For detailed information, visit [jwt.io](https://jwt.io/).
 
-All the fields in this table are required.
-All keys and values are case sensitive.
-All JWTs need to be BASE64 encoded when used as Authorization headers.
+#### Supported Signing Algorithms
 
-JWT Claim | Abbreviated | Data Type             | Notes
-----------|-------------|-----------------------|----------------------------------
-Token ID  | `jti`       | String                | A unique ID for each token. Most useful for audit, debugging and investigation of issues. UUID or high resolution timestamps can be used.
-Issuer    | `iss`       | String                | This is the identifier of your organization.
-Issed at  | `iat`       | Unix Time aka IntDate | The time the token was issues. A token issued in future is invalid. A token more than 1 hour is considered expired.
-Expiraion | `exp`       | Unix Time aka IntDate | The time this token will expire and be invalid.  A token more than 1 hour is considered expired, regardless of this value.
-Audience  | `aud`       | String                | This needs to match the domain and region you are calling. Examples are: `us.api.hemato.ai` or `dev.api.hemato.ai`
-          |             |                       |
-User ID   | `sub`       | String                | This needs to be one of the user ids from the same organization where the signing key belongs to and this use must have permission to access this region.
-Role      | `role`      | String                | This is the role of the user. Available roles are `admin`, `user`, `device`, `service`. This is used to determine the permissions of the bearer.
-          |             |                       |
-Key ID *  | `kid`       | String                | Only required if using `RS256` signing algorithm. This is the ID of the public key that was used to sign the token.
-          |             |                       |
+- `RSA384` (RSASSA-PKCS-v1.5 using SHA-384)
+- `RS256` (RSASSA-PKCS-v1.5 using SHA-256)
 
+#### Required JWT Fields
 
+| JWT Claim   | Abbreviated | Data Type | Description |
+|-------------|-------------|-----------|-------------|
+| Token ID    | `jti`       | String    | Unique ID for each token (e.g., UUID or high-resolution timestamp) |
+| Issuer      | `iss`       | String    | Identifier of your organization |
+| Issued at   | `iat`       | IntDate   | Token issue time (Unix timestamp) |
+| Expiration  | `exp`       | IntDate   | Token expiration time (Unix timestamp, max 1 hour from issue) |
+| Audience    | `aud`       | String    | API domain and region (e.g., `us.api.hemato.ai`) |
+| User ID     | `sub`       | String    | User ID from the organization owning the signing key |
+| Role        | `role`      | String    | User role (`admin`, `user`, `device`, or `service`) |
+| Key ID *    | `kid`       | String    | Required for `RS256` algorithm. ID of the public key used for signing |
 
-### How to create your own keys
+> Note: All fields are case-sensitive and required. JWTs must be BASE64 encoded when used as Authorization headers.
+
+### Creating Key Pairs
+
+Here is an exmaple shell command to create a key pair. You can then share ONLY THE PUBLIC key with Hemato.AI. Keep the private key safe. You will be using the private key to sign your own authorization headers.
+
+Anyone with access to your private key can impersonate you and your users, devices and servers.
+
 
 ```shell
 ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
@@ -215,22 +289,16 @@ cat jwtRS256.key.pub
 ```
 
 
+### Sample JWT Structure
 
-### Example
-
-On the right you can see an example of a Hemato.AI JWT
-
-> This is the structure of a Hemato.AI JWT
 ```json
 {
-  "alg":"HS256", // or RS256
-  "typ":"JWT"
+  "alg": "RS256",
+  "typ": "JWT"
 }
 .
 {
-  "aud": [
-    "us.api.hemato.ai",
-  ],
+  "aud": ["us.api.hemato.ai"],
   "exp": 1683095428,
   "iat": 1682945428,
   "iss": "1stdevision.example.com",
@@ -243,181 +311,122 @@ On the right you can see an example of a Hemato.AI JWT
 
 ### Debugging JWTs
 
-You can decode and inspect your JWTs at [https://jwt.io/](https://jwt.io/)
+- Decode and inspect JWTs at [jwt.io](https://jwt.io/).
+- Use the `/auth/hello` endpoint for detailed JWT information and potential rejection reasons.
 
-You can also make a call to `/auth/hello` endpoint and get more helpful information about your JWT and reasons it may be rejected.
 
 ```shell
-# if you are using httpie
 http -f POST https://dev.api.hemato.ai/auth/hello Authorization:HEMATO_AI_AUTH_TOKEN
-# if you are using curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/auth/hello
 ```
 
+# Peripheral Blood Smear (PBS) Detection Workflow
 
-# Get a Detection Report
+This guide outlines the process of submitting microscopic images of peripheral blood samples and receiving diagnostic responses from Hemato.AI.
 
-## Workflow
-
-To get Hemato.AI's detection report on a Peripheral Blood Smear you can follow these steps:
-
-1. Get an ID for your new PBS Study
-1. Optionally provide a callback URL
-1. Upload the files under the new ID
-1. Request a Diagnostic Study
-1. Optionally listen for a callback, with information about the sample, dwnloaded file size and formats and sanity checks.
-1. Wait for it
-1. Optionally listen for a callback, with information about the outcome of the detection study
-1. Ask for the report
+## Overview
 
 ![Peripheral Blood Study Flow 1](PBSStudyWorkflow1.png)
 
+The workflow consists of the following steps:
+
+1. Create a new PBS study
+2. Upload image files
+3. Request a detection task
+4. Wait for processing
+5. Retrieve the detection report
+
+## Detailed Workflow
 
 ### 1. Create a New Study
-Create a study and store the Study-ID (aka PBS-ID). This ID will be used to upload the images, request diagnostic study of the sample, provide any other information available and afterwards get the results of Hemato.AI's review.
-You need to store and keep track of this ID.
+
+Create a study to obtain a Study ID (PBS-ID) for subsequent operations.
 
 #### HTTP Request
-Make a `POST` call to the `/pbs` endpoint. You can provide any number of tags (key value string pairs) along side this request. These tags can allow you to associate Patient Proxy Identifiers, Device Identifiers, Organization IDs or any number of other information that is important to you along side the PBS. These tags can later be used to find and retrieve PBSs easier.
 
-Please do NOT store Personally Identifiable Information (PII) in these fields.
+`POST /pbs`
 
 ```shell
-# use httpie from https://httpie.io/
-echo '{"tags":{"patient_proxy_id":"PPID12345"}}' | http -f POST https://in.api.hemato.ai/pbs Authorization:HEMATO_AI_AUTH_TOKEN
-# alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs
+echo '{"tags":{"patient_proxy_id":"PPID12345","sample_id":"XYZ12345678","device_id":"SABCD"}}' | \
+http -f POST https://in.api.hemato.ai/pbs \
+'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
-> Make sure to replace `HEMATO_AI_AUTH_TOKEN` with your API key.
 
-> The above command returns a JSON structure like this:
+#### Response
 
 ```json
 {
   "status": 201,
-  "results":{
-    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd",
+  "results": {
+    "pbs_study_id": "c7d453a9-676d-4b9f-a505-8a9021b76dfd",
     "tags": {
-      "patient_proxy_id": "PPID12345"
+      "patient_proxy_id": "PPID12345",
+      "sample_id":"XYZ12345678",
+      "device_id":"SABCD"
     }
   }
 }
 ```
-<aside class="warning">Please do NOT include any Personanlly Identifiable Information (PII) or Personal Health Records (PHI) in the tags</aside>
 
-### 2. Upload the files
-Upload the images by calling the PBS upload API as many times as needed.
+> **Warning**: Do not include Personally Identifiable Information (PII) or Personal Health Information (PHI) in tags.
+
+### 2. Upload Image Files
+
+Upload images associated with the PBS study.
+For each image, you are required to provide `rbc_diameter` parameter as a URL query param.
+`rbc_diameter` is the number of pixels in the diameter of a normal human Red Blood Cell in the image. This is a measure of magnification that includes digital and optical and sensor size related magnifications.
+You do NOT need to measure this for every image. You can do the measurements once and use the same number for all image prepared with the same device settings.
+Alternatively you can share samples with Hemato.AI and Hemato.AI will provide the numbers for your use.
 
 #### HTTP Request
-Make a `POST` call to the `/pbs/YOUR_NEW_PBS_ID/files?file_name=some_file_name.jpg` endpoint. Here `YOUR_NEW_PBS_ID` is the id you obtained from step 1 (`results.pbs_study_id` in the response structure returned).
 
-To determin the file type, this endpoint expects either "file_name" or "content_type" query parameters. For example for a JPEG file you can use `file_name=some_file_name.jpg` or `content_type=image/jpeg`.
-
+`POST /pbs/{PBS_ID}/files?file_name={filename}&rbc_diameter={size}`
 
 ```shell
-
-This is an idempotent call. It means you can send the same file multiple times and it will only be counted as one file.
-Once submitted however, you cannot update the same file or change it or its metadata. You can only add more  files to the same PBS study.
-
-The file type is determined by the file extension of the provided "file_name" query parameter or the "content_type" provided as a query parameter. So when sending a request to upload a jpg file for example, it is enough to have a file_name in your url ending in .jpg or .jpeg for example  https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg
-
-
-If no file type can be determined or provided, a 400 - Bad Request error is returned.
-
-
-```shell
-# use httpie from https://httpie.io/
-http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg  Authorization:HEMATO_AI_AUTH_TOKEN  < /local/path/to/MS12_12.jpg
-# alternatively use curl
-curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary "@/local/path/to/MS12_12.jpg"  https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files
+http -f POST \
+https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg&rbc_diameter=85 \
+'Authorization:HEMATO_AI_AUTH_TOKEN' < /path/to/MS12_12.jpg
 ```
 
-```Python
-```
-
-```Go
-
-  imageBytes, err := os.ReadFile(fmt.Sprintf("%s/%s", filePath, fileName))
-  if err != nil {
-		return ...
-	}
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", "https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID", bytes.NewReader(imageBytes))
-	if err != nil {
-		return ...
-	}
-	q := req.URL.Query()
-	q.Add("file_name", fileName)
-	req.URL.RawQuery = q.Encode()
-
-  err = client.Do(q)
-  if err != nil {
-		return ...
-	}
-  ...
-
-```
-
-
-> The above command returns a JSON structure like this:
+#### Response
 
 ```json
 {
   "status": 201,
-  "results":{
-    "pbs_study_id":"c7d453a9-676d-4b9f-a505-8a9021b76dfd",
-    "file_id":"sha224-i-4d58b0cee1e38f75f93e2e605d1e6ad44c24a975d0c3b53367de7c86"
-  },
-  "debug_info":{
-
+  "results": {
+    "pbs_study_id": "c7d453a9-676d-4b9f-a505-8a9021b76dfd",
+    "file_id": "sha224-i-4d58b0cee1e38f75f93e2e605d1e6ad44c24a975d0c3b53367de7c86"
   }
 }
 ```
 
-<aside class="warning">Notes:<ul>
-<li>Please note that this is NOT an HTTP multipart call with `Content-Type: multipart/form-data` </li>
-<li>Plaese note that this is not a form submission call. The entire body of the request is the image.
-</ul>
-</aside>
-
+> **Note**: This is not a multipart upload. The entire request body should contain the image data.
 
 ### 3. Request a Detection Task
-When all the files for a particular PBS is uploaded, you can make a call to mark the PBS as ready to be processed and ask for one or more Detection Tasks to be performed on this PBS. After this call you will not be able to upload additional files for this PBS.
 
-At this time, for this deployment, these Detection Tasks are available:
+After uploading all files, request a detection task to be performed on the PBS.
 
+#### Available Detection Tasks
 
-| Task                        | Type      | Identifier        | Notes |
-|-----------------------------|-----------|-------------------|--------------|
-| Detect Any Signs of Malaria | Detection | `MALARIA_ANY_ANY` | Reports any sign of malaria parasites, including All species, Active infections, Infections under treatment |
+| Task | Type | Identifier | Description |
+|------|------|------------|-------------|
+| Detect Any Signs of Malaria | Detection | `MALARIA_ANY_ANY` | Reports any sign of malaria parasites, including all species, active infections, and infections under treatment |
 
+#### HTTP Request
 
-Optionally you can register a `callback_url` that will be called when the report is ready.
-We’ll send a POST request to the callback URL with details of the report when ready.
-The callback url needs to accept a POST call, and must support HTTPS with a valid server certificate. The body of the call will conform to `{"pbs_stody_id":"25f7de38-ba9c-4b45-a4d8-8c13461d7b39", "report_status": "ready", "progress": 1.0}` but it can be ignored.
-So there are two approaches that users can take:
-1. Include the `pbs_study_id` or any other information you need (no PII or PHI) in the url to be called.
-2. Use a single generic url, but parse and use the information in the body to identify which study is the subject of the call back.
-
-Although it is not strictly needed, we recommend you include a cryptographic signature as part of your URL, so that you can verify the authenticity of the calls to your endpoint. Example:
-`{"callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/<timestamped_cryptographic_signature_valid_only_for_this_PBS_STUDY_ID>"`
-
-This enables early filtration of incoming traffic, particularly in cases where the backend systems may be inundated by a surge of malicious or rogue requests.
-
+`POST /pbs/{PBS_ID}/tasks`
 
 ```shell
-# use httpie from https://httpie.io/
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks Authorization:HEMATO_AI_AUTH_TOKEN
-# alternatively use curl
-echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_report_is_ready/<PBS_STUDY_ID>/"}' | curl -x POST --header "Authorization:HEMATO_AI_AUTH_TOKEN" --data-binary @- https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks
+echo '{"diagnostic_tasks":["MALARIA_ANY_ANY"], "callback_url":"https://example.com/pbs_report_is_ready/{PBS_STUDY_ID}/"}' | \
+http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks \
+'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
 
-> The above command returns a JSON structure like this:
+#### Response
 
 ```json
 {
-  "results":{
-    "pbs_study_id":"48ae6352-d15d-440a-83f3-05a1f68aa11b",
+  "results": {
+    "pbs_study_id": "48ae6352-d15d-440a-83f3-05a1f68aa11b",
     "tasks": [
       "TASK_1_IDENTIFIER"
     ]
@@ -425,24 +434,24 @@ echo '{"diagnostic_tasks":["pbs_v1"], "callback_url":"https://example.com/pbs_re
 }
 ```
 
+### 4. Wait for Processing
 
-### 4. Wait for it
-Depending on the size of the files submitted, the number Diagnostic tasks requested, and other factors like general system workload, it will take between a few seconds to 10s of seconds for the results to be ready.
+Processing time varies based on number of files and their size, number of tasks, and system workload and available resources. You can either:
 
-If you registerd a callback url in step 3, you can wait for that url to be called.
+- Wait for a callback if you provided a `callback_url`
+- Check the status manually
 
-You can check the status of the task by making a GET call to /status
+#### Check Status
 
-> To get the status of a PBS
+`GET /pbs/{PBS_ID}/status`
 
 ```shell
-#
-http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status Authorization:HEMATO_AI_AUTH_TOKEN
-#
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status
+http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status \
+'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
 
-> This returns
+#### Response
+
 ```json
 {
   "status": 200,
@@ -450,44 +459,50 @@ curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs/
     "pbs_study_id": "62dd0300-880e-4069-bea8-66c9ca73c207",
     "report_status": "ready",
     "progress": 1.0,
-    "progress_message":"Reports are ready",
-  },
-  "debug_info" :{}
+    "progress_message": "Reports are ready"
+  }
 }
 ```
 
+### 5. Retrieve the Detection Report
 
-### 5. Get The Report for a Detection Task
-You can get the latest version of the reports by making a GET call.
-In cases that there are multiple revisions and you want to get an earlier version of the report you need to specify the version.
+Once processing is complete, retrieve the report for the requested detection task.
 
+#### HTTP Request
 
-> To get the latest diagnostic report on a PBS
+`GET /pbs/{PBS_ID}/report/{TASK_IDENTIFIER}`
 
 ```shell
-#
-http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY Authorization:HEMATO_AI_AUTH_TOKEN
-#
-curl --header "Authorization:HEMATO_AI_AUTH_TOKEN" https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY
+http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/report/MALARIA_ANY_ANY \
+Authorization:HEMATO_AI_AUTH_TOKEN
 ```
 
-> Which in turn returns a JSON structure like:
+#### Response
 
 ```json
 {
-	"status": 200,
-	"results": {
-		"pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
+  "status": 200,
+  "results": {
+    "pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
     "report": {
       "MALARIA_ANY_ANY": {
         "positive_count": 12,
         "negative_count": 3
       }
     }
-	},
-	"debug_info": {}
+  }
 }
 ```
+
+## Best Practices
+
+1. Store and track the PBS-ID (Study ID) throughout the process.
+2. Ensure accurate "rbc diameter" when uploading images.
+3. Use HTTPS for callback URLs and consider including a cryptographic signature for security.
+4. Do not include PII or PHI in tags or callback URLs.
+
+For any issues or questions, please contact Hemato.AI support.
+
 
 # Health Check
 If you need to check the health status of the Hemato.AI api you can make a GET call to the heartbeat endpoint.
