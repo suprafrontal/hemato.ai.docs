@@ -9,7 +9,7 @@ language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of
 
 toc_footers:
   - <a href='https://hemato.ai'>Hemato.AI</a>
-  - <a href='mailto:ai@hemato.ai'>Sign Up for a Developer Key</a>
+  - <a href='mailto:support@hemato.ai'>Sign Up for a Developer Key</a>
 
 includes:
   - errors
@@ -275,7 +275,7 @@ Hemato.AI uses JSON Web Tokens (JWT) for authorization headers. For detailed inf
 
 ### Creating Key Pairs
 
-Here is an exmaple shell command to create a key pair. You can then share ONLY THE PUBLIC key with Hemato.AI. Keep the private key safe. You will be using the private key to sign your own authorization headers.
+Here is an example shell command to create a key pair. You can then share ONLY THE PUBLIC key with Hemato.AI. Keep the private key safe. You will be using the private key to sign your own authorization headers.
 
 Anyone with access to your private key can impersonate you and your users, devices and servers.
 
@@ -324,8 +324,6 @@ http -f POST https://dev.api.hemato.ai/auth/hello Authorization:HEMATO_AI_AUTH_T
 This guide outlines the process of submitting microscopic images of peripheral blood samples and receiving diagnostic responses from Hemato.AI.
 
 ## Overview
-
-![Peripheral Blood Study Flow 1](PBSStudyWorkflow1.png)
 
 The workflow consists of the following steps:
 
@@ -501,7 +499,7 @@ Authorization:HEMATO_AI_AUTH_TOKEN
 3. Use HTTPS for callback URLs and consider including a cryptographic signature for security.
 4. Do not include PII or PHI in tags or callback URLs.
 
-For any issues or questions, please contact Hemato.AI support.
+For any issues or questions, please contact support@hemato.ai
 
 
 # Health Check
