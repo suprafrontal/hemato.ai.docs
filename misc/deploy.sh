@@ -11,6 +11,9 @@ echo Building the static website
 # if running for the first time you need to first fetch the image
 # docker build . -t slatedocs/slate
 # docker run --rm --name slate -v $(pwd)/build:/srv/slate/build -v $(pwd)/source:/srv/slate/source slatedocs/slate build
+
+bundle exec middleman build
+
 mkdir -p out
 cp -r build/* out/
 
