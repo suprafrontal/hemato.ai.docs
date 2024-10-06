@@ -521,8 +521,14 @@ http https://in.api.hemato.ai/heartbeat
 # Sample Code
 
 The following code sample demonstrates a complete example of interaction with the api.
-This code references two additional files:
-1. A json file that lists samples with or without malaria, you can instead call the `process` function on any picture, providing it's path and the estimated RBC diameter in pixels. If you prefere to use the json dataset the format is as follows:
+This code references two additional files.
+
+1. Private key file
+1. Dataset file
+
+
+## Dataset File
+A json file that lists samples with or without malaria, you can instead call the `process` function on any picture, providing it's path and the estimated RBC diameter in pixels. If you prefere to use the json dataset the format is as follows:
 
 ```json
 {
@@ -550,7 +556,15 @@ This code references two additional files:
 }
 ```
 
-2. A private key. Please follow the instructions from the "auth" section above and contact us at support@hemato.ai to enable your key. and provide you with your key ID.
+## Private Key File
+A private key. Please follow the instructions from the "auth" section above and contact us at support@hemato.ai to enable your key. and provide you with your key ID.
+
+
+## Sample Code
+This code can be used as a starting point to build integration with Hemato.AI's diagnostic API.
+
+This sample code is currently only avalable in Go, please make sure you change the language to Go from the top right language selector to see the sample code.
+If you need support in other languages please feel free to reach out support@hemato.ai
 
 
 ```go
