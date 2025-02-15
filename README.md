@@ -2,9 +2,9 @@
 
 - install `rbenv`
 - `rbenv local 3.3.5`
-- rbenv init (or source ~/.zprofile )
+- rbenv init (or source ~/.zprofile ) # I think sourcing works better?!
 - `gem update --system`
-- `gem install bundler`
+- `gem install bundler` # I needed to gem uninstall bundler --all first one time
 - `bundle install`
 
 preview locally
