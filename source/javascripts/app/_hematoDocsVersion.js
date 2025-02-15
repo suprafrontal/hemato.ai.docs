@@ -1,4 +1,4 @@
 function hematoDocsVersion() {
-	return "hemato.docs.496.in.48fe3ec";
+	return "hemato.docs.497.in.fa2baf7";
 }
 //
