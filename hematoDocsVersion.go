@@ -1,5 +1,5 @@
 package main
 
 func hematoDocsVersion() string {
-	return "hemato.docs.500.in.d94272c"
+	return "hemato.docs.501.in.a00c75b"
 }

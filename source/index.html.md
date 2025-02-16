@@ -485,7 +485,7 @@ Once processing is complete, retrieve the report for the requested detection tas
 ```shell
 # STEP 5. Retrieve the Detection Report
 http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/reports/MALARIA_ANY_ANY \
-Authorization:HEMATO_AI_AUTH_TOKEN
+'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
 
 #### Response
