@@ -352,6 +352,7 @@ Create a study to obtain a Study ID (PBS-ID) for subsequent operations.
 `POST /pbs`
 
 ```shell
+# STEP 1: Create A New study
 echo '{"patient_proxy_id":"PPID12345","sample_id":"XYZ12345678","device_id":"SABCD"}' | \
 http -f POST https://in.api.hemato.ai/pbs \
 'Authorization:HEMATO_AI_AUTH_TOKEN'
@@ -388,6 +389,7 @@ Alternatively you can share samples with Hemato.AI and Hemato.AI will provide th
 `POST /pbs/{PBS_ID}/files?file_name={filename}&rbc_diameter={size}`
 
 ```shell
+# STEP 2. Upload Image Files
 http -f POST \
 https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/files?file_name=MS12_12.jpg&rbc_diameter=85 \
 'Authorization:HEMATO_AI_AUTH_TOKEN' < /path/to/MS12_12.jpg
@@ -422,6 +424,7 @@ After uploading all files, request a detection task to be performed on the PBS.
 `POST /pbs/{PBS_ID}/tasks`
 
 ```shell
+# STEP 3. Request a Detection Task
 echo '{"diagnostic_tasks":["MALARIA_ANY_ANY"], "callback_url":"https://example.com/pbs_report_is_ready/{PBS_STUDY_ID}/"}' | \
 http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks \
 'Authorization:HEMATO_AI_AUTH_TOKEN'
@@ -452,6 +455,7 @@ Processing time varies based on number of files and their size, number of tasks,
 `GET /pbs/{PBS_ID}/status/MALARIA_ANY_ANY`
 
 ```shell
+# STEP 4. Wait for Processing
 http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/status/MALARIA_ANY_ANY \
 'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
@@ -479,6 +483,7 @@ Once processing is complete, retrieve the report for the requested detection tas
 `GET /pbs/{PBS_ID}/reports/{TASK_IDENTIFIER}`
 
 ```shell
+# STEP 5. Retrieve the Detection Report
 http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/reports/MALARIA_ANY_ANY \
 Authorization:HEMATO_AI_AUTH_TOKEN
 ```
