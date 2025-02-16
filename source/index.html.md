@@ -161,6 +161,7 @@ To obtain an authorization token:
 
 1. Call the `/auth/login` endpoint for a specific region.
 2. Provide a username and password hash (SHA-256 of the actual password).
+3. A token will be returned for you to use (in the shell example it is stored in the variable `$PASS_SHA` )
 
 > Note: Never send raw passwords. Always use the SHA-256 hash for security.
 
@@ -169,17 +170,14 @@ To obtain an authorization token:
 Here are code examples showing how to generate the password hash (sha256) that you will need to send along a user name to the auth endpoint.
 
 
-```shell
-# SECURITY RISK:
-# Please ONLY use this for debugging login problems.
-# MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
-# otherwise your plan password will remain in your shell history and possibly leak into backups and such.
-
-echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1
-```
-
 ```go
 package main
+
+// SECURITY RISK:
+// Please ONLY use this for debugging login problems.
+// MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
+// otherwise your plan password will remain in your shell history and possibly leak into backups and such.
+
 
 import (
 	"crypto/sha256"
@@ -193,6 +191,11 @@ func main() {
 ```
 
 ```typescript
+// SECURITY RISK:
+// Please ONLY use this for debugging login problems.
+// MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
+// otherwise your plan password will remain in your shell history and possibly leak into backups and such.
+
 import { CryptoJS } from 'crypto'
 const passSha = CtryptoJS.SHA256('YOUR_ACTUAL_PASSWORD').toString(CryptoJS.enc.Hex)
 console.log(passSha)
@@ -203,6 +206,11 @@ console.log(passSha)
 Here are examples codes that uses the password hash from above to login for an interactive session.
 
 ```shell
+# SECURITY RISK:
+# Please ONLY use this for debugging login problems.
+# MAKE SURE TO REMOVE THIS FROM YOUR SHELL HISTORY.
+# otherwise your plan password will remain in your shell history and possibly leak into backups and such.
+
 export PASS_SHA_256=`echo -n YOUR_ACTUAL_PASSWORD | shasum -a 256 | cut -d ' ' -f 1`
 echo '{"user":"ali@example.com","pass_hash":"'${PASS_SHA_256}'"}' | \
 http -F POST https://in.api.hemato.ai/auth/login
@@ -344,7 +352,7 @@ Create a study to obtain a Study ID (PBS-ID) for subsequent operations.
 `POST /pbs`
 
 ```shell
-echo '{"tags":{"patient_proxy_id":"PPID12345","sample_id":"XYZ12345678","device_id":"SABCD"}}' | \
+echo '{"patient_proxy_id":"PPID12345","sample_id":"XYZ12345678","device_id":"SABCD"}' | \
 http -f POST https://in.api.hemato.ai/pbs \
 'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
