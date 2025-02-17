@@ -31,7 +31,7 @@ var GOOGLE_ANALYTICS_CODE_SNIPPET = `
   gtag("config", "UA-154567842-1");
 </script>`
 
-var STATIC_DIR = "static" // this is to evade .gitignore tha is ignoring /build and docker follows it even if .dockeringore is not
+var STATIC_DIR = "dist" // this is to evade .gitignore tha is ignoring /build and docker follows it even if .dockeringore is not
 
 func main() {
 	osSignalChan := make(chan os.Signal, 1)
