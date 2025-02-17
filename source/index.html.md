@@ -495,9 +495,9 @@ http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/reports/MALARIA_ANY_ANY \
   "status": 200,
   "results": {
     "pbs_study_id": "4bb7fe9e-b608-4d68-adbe-8655c991f494",
-		"conclusion": "present",
-		"tile_data": [
-		  {
+    "conclusion": "present",
+    "tile_data": [
+      {
         "image_id": "sha224-s01-e4fca243d465749062f8bf4fa6d416d6b944f6a2af55573c5e13c732",
         "tile_location": {
           "x": 512,
@@ -537,9 +537,9 @@ http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/reports/MALARIA_ANY_ANY \
         },
         "likelihood": 0.0099
       }
-		]
-	},
-	"debug_info": {
+    ]
+  },
+  "debug_info": {
     "delta": "846.611195ms",
     "version": "bb_api.591.develop.1c2aa2d"
   }
