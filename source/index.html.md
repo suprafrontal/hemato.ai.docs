@@ -425,7 +425,7 @@ After uploading all files, request a detection task to be performed on the PBS.
 
 ```shell
 # STEP 3. Request a Detection Task
-echo '{"diagnostic_tasks":["MALARIA_ANY_ANY"], "callback_url":"https://example.com/pbs_report_is_ready/{PBS_STUDY_ID}/"}' | \
+echo '{"diagnostic_tasks":["MALARIA_ANY_ANY"]}' | \
 http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks \
 'Authorization:HEMATO_AI_AUTH_TOKEN'
 ```
@@ -447,7 +447,7 @@ http -f POST https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/tasks \
 
 Processing time varies based on number of files and their size, number of tasks, and system workload and available resources. You can either:
 
-- Wait for a callback if you provided a `callback_url`
+- Optionally wait for a callback if you provided the `callback_url` to be called
 - Check the status manually
 
 #### Check Status
@@ -550,8 +550,8 @@ http https://in.api.hemato.ai/pbs/YOUR_NEW_PBS_ID/reports/MALARIA_ANY_ANY \
 
 1. Store and track the PBS-ID (Study ID) throughout the process.
 2. Ensure accurate "rbc diameter" when uploading images.
-3. Use HTTPS for callback URLs and consider including a cryptographic signature for security.
-4. Do not include PII or PHI in tags or callback URLs.
+3. Use HTTPS for the optional callback URLs and consider including a cryptographic signature for security.
+4. Do not include PII or PHI in tags or the optional callback URLs.
 
 For any issues or questions, please contact support@hemato.ai
 
